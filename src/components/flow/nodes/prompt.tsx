@@ -6,12 +6,23 @@ import { Clipboard } from "lucide-react";
 import DOMPurify from "dompurify";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
+import Image from "next/image";
 
+import { cn } from "@/lib/utils";
 import { useNodeStore } from "@/components/flow/store";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+
 import type { AideNode, PromptNode } from "./types";
 
-function PromptNode({ id, isConnectable }: NodeProps<AideNode>) {
+function PromptNode({ id, isConnectable, selected }: NodeProps<AideNode>) {
   const { node, setPrompt } = useNodeStore(
     useShallow((state) => ({
       node: state.nodes.find((n) => n.id === id),
@@ -31,19 +42,47 @@ function PromptNode({ id, isConnectable }: NodeProps<AideNode>) {
   };
 
   return (
-    <div className="relative w-80 rounded-xl border border-gray-200 bg-white p-3">
-      <div className="">
-        <div>
-          <h1 className="block font-semibold tracking-tight">Prompt</h1>
-          <label htmlFor="text" className="text-[10px] text-gray-500">
-            Use this node for creating prompt in the flow.
-          </label>
+    <div
+      className={cn(
+        "relative w-80 rounded-xl border-2 border-gray-200 bg-white p-3",
+        selected && "border-slate-400",
+      )}
+    >
+      <div>
+        <h1 className="block font-semibold tracking-tight">Prompt</h1>
+        <label htmlFor="text" className="text-[10px] text-gray-500">
+          Use this node for an LLM model.
+        </label>
+
+        <div className="mb-2">
+          <Select defaultValue="openai">
+            <SelectTrigger className="w-full px-2 py-1 text-xs focus:border-slate-400 focus:ring-0">
+              <SelectValue placeholder="Choose LLM..." />
+            </SelectTrigger>
+            <SelectContent className="text-xs">
+              <SelectItem value="openai">
+                <div className="flex items-center gap-2">
+                  <Image src="/openai.svg" alt="" width={15} height={15} />
+                  OpenAI ChatGPT-4o-mini
+                </div>
+              </SelectItem>
+              <SelectItem value="claude">
+                <div className="flex items-center gap-2">
+                  <Image src="/anthropic.png" alt="" width={15} height={15} />
+                  Claude 3.5 Sonnet
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <textarea
+
+        <label htmlFor="text" className="text-[10px] text-gray-500">
+          Describe how the LLM should act.
+        </label>
+        <Textarea
           placeholder="Act as an expert in your summarization..."
           onChange={onChange}
           disabled={node.data.isLoading}
-          className="w-full rounded-md border p-1.5 text-xs hover:cursor-text focus:border-0 focus:ring-0"
         />
         {node.data.isLoading && <Spinner />}
         {!node.data.isLoading && node.data.response && (
