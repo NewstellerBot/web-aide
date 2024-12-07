@@ -14,7 +14,7 @@ export default async function Layout({
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <main>
-        <div className="p-1">
+        <div className="p-0.5">
           <SidebarTrigger />
         </div>
         {children}

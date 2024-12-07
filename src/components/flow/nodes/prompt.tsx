@@ -7,6 +7,7 @@ import DOMPurify from "dompurify";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import Image from "next/image";
+import { type Node } from "@xyflow/react";
 
 import { cn } from "@/lib/utils";
 import { useNodeStore } from "@/components/flow/store";
@@ -19,10 +20,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { v4 } from "uuid";
 
-import type { AideNode, PromptNode } from "./types";
+export type Model = "openai" | "claude";
 
-function PromptNode({ id, isConnectable, selected }: NodeProps<AideNode>) {
+export type PromptNode = Node<
+  {
+    prompt: string;
+    model: Model;
+    isLoading: boolean;
+    response?: string;
+  },
+  "prompt"
+>;
+
+export function defaultPromptNode() {
+  return {
+    id: v4(),
+    position: { x: 50, y: 50 },
+    data: {
+      prompt: "",
+      model: "openai",
+      isLoading: false,
+    },
+    type: "prompt",
+  };
+}
+
+function PromptNode({
+  id,
+  data,
+  selected,
+  isConnectable,
+}: NodeProps<PromptNode>) {
   const { node, setPrompt } = useNodeStore(
     useShallow((state) => ({
       node: state.nodes.find((n) => n.id === id),
@@ -31,16 +61,13 @@ function PromptNode({ id, isConnectable, selected }: NodeProps<AideNode>) {
   );
   if (!node) return null;
   if (node.type !== "prompt") return;
-
   const onChange = (e: { target: { value: string } }) => {
     setPrompt(id, e.target.value);
   };
-
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(node.data.response ?? "");
+    await navigator.clipboard.writeText(data.response ?? "");
     toast.success("Response copied to clipboard");
   };
-
   return (
     <div
       className={cn(
@@ -53,7 +80,6 @@ function PromptNode({ id, isConnectable, selected }: NodeProps<AideNode>) {
         <label htmlFor="text" className="text-[10px] text-gray-500">
           Use this node for an LLM model.
         </label>
-
         <div className="mb-2">
           <Select defaultValue="openai">
             <SelectTrigger className="w-full px-2 py-1 text-xs focus:border-slate-400 focus:ring-0">
@@ -75,17 +101,16 @@ function PromptNode({ id, isConnectable, selected }: NodeProps<AideNode>) {
             </SelectContent>
           </Select>
         </div>
-
         <label htmlFor="text" className="text-[10px] text-gray-500">
           Describe how the LLM should act.
         </label>
         <Textarea
           placeholder="Act as an expert in your summarization..."
           onChange={onChange}
-          disabled={node.data.isLoading}
+          disabled={data.isLoading}
         />
-        {node.data.isLoading && <Spinner />}
-        {!node.data.isLoading && node.data.response && (
+        {data.isLoading && <Spinner />}
+        {!data.isLoading && data.response && (
           <div className="mt-2">
             <div className="flex items-center justify-between">
               <h1 className="font-semibold tracking-tight">Response</h1>
@@ -103,7 +128,6 @@ function PromptNode({ id, isConnectable, selected }: NodeProps<AideNode>) {
           </div>
         )}
       </div>
-
       <Handle
         type="source"
         position={Position.Right}

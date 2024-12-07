@@ -2,7 +2,7 @@
 
 import "@xyflow/react/dist/style.css";
 
-import { ReactFlow, Background, Controls } from "@xyflow/react";
+import { ReactFlow, Background, Controls, type NodeTypes } from "@xyflow/react";
 import { useShallow } from "zustand/react/shallow";
 import { type DragEvent } from "react";
 
@@ -10,10 +10,26 @@ import { useNodeStore } from "@/components/flow/store";
 import PromptNode from "@/components/flow/nodes/prompt";
 import Sidebar from "@/components/flow/sidebar";
 import { preventDefault } from "@/lib/utils";
+import DbNode from "@/components/flow/nodes/db";
 
-const nodeTypes = {
+import { type AideState } from "./types";
+
+const nodeTypes: NodeTypes = {
   prompt: PromptNode,
+  db: DbNode,
 };
+
+const selector = (state: AideState) => ({
+  currentType: state.currentType,
+  viewport: state.viewport,
+  nodes: state.nodes,
+  edges: state.edges,
+  onNodesChange: state.onNodesChange,
+  onEdgesChange: state.onEdgesChange,
+  onConnect: state.onConnect,
+  setViewport: state.setViewport,
+  createNode: state.createNode,
+});
 
 export default function Flow() {
   const {
@@ -23,20 +39,10 @@ export default function Flow() {
     onNodesChange,
     onEdgesChange,
     setViewport,
+    onConnect,
     createNode,
     currentType,
-  } = useNodeStore(
-    useShallow((state) => ({
-      currentType: state.currentType,
-      viewport: state.viewport,
-      nodes: state.nodes,
-      edges: state.edges,
-      onNodesChange: state.onNodesChange,
-      onEdgesChange: state.onEdgesChange,
-      setViewport: state.setViewport,
-      createNode: state.createNode,
-    })),
-  );
+  } = useNodeStore(useShallow(selector));
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -46,6 +52,9 @@ export default function Flow() {
       x: (e.clientX - left - viewport.x) / viewport.zoom,
       y: (e.clientY - top - viewport.y) / viewport.zoom,
     };
+
+    console.log("current type: ", currentType);
+    console.log("nodes", nodes);
 
     createNode(currentType, position);
   };
@@ -65,6 +74,7 @@ export default function Flow() {
         onDragEnter={preventDefault}
         onDragOver={preventDefault}
         onDrop={handleDrop}
+        onConnect={onConnect}
       >
         <Background />
         <Controls />
