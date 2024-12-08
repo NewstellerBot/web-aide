@@ -47,7 +47,7 @@ export default function Flow() {
 
   if (workflow === "")
     return (
-      <div className="flex h-[calc(100vh-36px)] w-screen items-center justify-center border-t bg-neutral-100">
+      <div className="flex h-full items-center justify-center border-t bg-neutral-100">
         <span className="text-4xl font-bold text-neutral-300">
           No Workflow Chosen
         </span>
@@ -65,7 +65,7 @@ export default function Flow() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-36px)] w-screen border-t">
+    <div className="flex h-[calc(100svh-3rem)] border-t">
       <button
         className="fixed left-10 top-0"
         onClick={() => console.log(nodes, edges)}
