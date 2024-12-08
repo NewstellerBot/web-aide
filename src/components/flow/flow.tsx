@@ -8,7 +8,6 @@ import { type DragEvent } from "react";
 
 import { useNodeStore } from "@/components/flow/store";
 import PromptNode from "@/components/flow/nodes/prompt";
-import Sidebar from "@/components/flow/sidebar";
 import { preventDefault } from "@/lib/utils";
 import DbNode from "@/components/flow/nodes/db";
 
@@ -61,8 +60,6 @@ export default function Flow() {
 
   return (
     <div className="flex h-[calc(100vh-36px)] w-screen border-t">
-      <Sidebar />
-
       <ReactFlow
         nodes={nodes}
         edges={edges}

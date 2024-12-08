@@ -9,7 +9,8 @@ import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
 import { debounce } from "@/lib/utils";
-import { updateNodes } from "@/app/actions/nodes";
+import { updateNodeDiff } from "@/components/flow/utils";
+import { updateEdgeDiff } from "@/components/flow/utils";
 import { defaultPromptNode } from "@/components/flow/nodes/prompt";
 import { defaultDbNode } from "@/components/flow/nodes/db";
 
@@ -39,7 +40,7 @@ const useNodeStore = create<AideState>()(
       y: 0,
       zoom: 1,
     },
-    currentType: "default",
+    currentType: "prompt",
     onNodesChange: (changes) =>
       set({ nodes: applyNodeChanges(changes, get().nodes) }),
     onEdgesChange: (changes) => {
@@ -89,14 +90,7 @@ const useNodeStore = create<AideState>()(
   })),
 );
 
-const updateDiff = async (oldNodes: Node[], newNodes: Node[]) => {
-  const nodesForUpdate = oldNodes
-    .flatMap((old, idx) => (old === newNodes[idx] ? [] : newNodes[idx]))
-    .filter((x) => !!x);
-  if (!nodesForUpdate) return;
-  return await updateNodes(nodesForUpdate);
-};
-
-// useNodeStore.subscribe((state) => state.nodes, debounce(200, updateDiff));
+useNodeStore.subscribe((state) => state.nodes, debounce(200, updateNodeDiff));
+useNodeStore.subscribe((state) => state.edges, debounce(200, updateEdgeDiff));
 
 export { useNodeStore };

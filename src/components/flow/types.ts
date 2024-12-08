@@ -7,7 +7,7 @@ import type {
   Node,
 } from "@xyflow/react";
 
-export type NodeType = "default" | "prompt" | "db";
+export type NodeType = "prompt" | "db";
 
 export type AideState = {
   nodes: Node[];

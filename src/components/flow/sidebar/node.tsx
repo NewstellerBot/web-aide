@@ -3,8 +3,9 @@ import { type ReactNode } from "react";
 
 import { useNodeStore } from "@/components/flow/store";
 import { type NodeType } from "@/components/flow/types";
+import { SidebarMenuButton } from "@/components/ui/sidebar";
 
-export default function Prompt({
+export default function Node({
   children,
   type,
 }: {
@@ -14,12 +15,11 @@ export default function Prompt({
   const setCurrentType = useNodeStore((s) => s.setCurrentType);
 
   return (
-    <div
+    <SidebarMenuButton
       draggable="true"
-      className="rounded-lg px-3 py-2 text-sm hover:cursor-grab hover:bg-slate-50 active:cursor-grabbing"
       onDragStart={() => setCurrentType(type)}
     >
       {children}
-    </div>
+    </SidebarMenuButton>
   );
 }

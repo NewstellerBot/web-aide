@@ -1,17 +1,76 @@
-import Prompt from "./prompt";
+import React from "react";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 
-export default function Sidebar() {
-    return (
-        <div className="w-80 border-r p-3">
-            <div className="mb-5">
-                <h2 className="font-semibold tracking-tight">Nodes</h2>
-                <p className="text-xs text-slate-600">
-                    Drag and drop nodes, connect, and create powerfull flows.
-                </p>
+import Node from "./node";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { type NodeType } from "../types";
+import Workflows, { NavProjectsSkeleton } from "./workflows";
+
+const nodes = [
+  { type: "prompt", label: "💬 LLM model" },
+  { type: "db", label: "💿 Knowledgebase" },
+];
+
+export default async function AppSidebar() {
+  return (
+    <Sidebar>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            <div className="flex items-center gap-2">
+              <Image src="/logo.svg" height={15} width={15} alt="logo" />
+              <span className="font-bold text-black">aide</span>
             </div>
-            <Prompt type="default">Builtint</Prompt>
-            <Prompt type="prompt">💬 LLM model</Prompt>
-            <Prompt type="db">💿 Knowledgebase</Prompt>
-        </div>
-    );
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarGroupLabel>
+              <span>Nodes</span>
+            </SidebarGroupLabel>
+            <SidebarMenu>
+              {nodes.map((n) => (
+                <SidebarMenuItem key={n.label}>
+                  <SidebarMenuButton asChild>
+                    <Node type={n.type as NodeType}>{n.label}</Node>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <Collapsible defaultOpen className="group/collapsible">
+          <SidebarGroup>
+            <SidebarGroupLabel asChild>
+              <CollapsibleTrigger>
+                Workflows
+                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+              </CollapsibleTrigger>
+            </SidebarGroupLabel>
+            <CollapsibleContent>
+              <SidebarGroupContent>
+                <React.Suspense fallback={<NavProjectsSkeleton />}>
+                  <Workflows />
+                </React.Suspense>
+              </SidebarGroupContent>
+            </CollapsibleContent>
+          </SidebarGroup>
+        </Collapsible>
+      </SidebarContent>
+    </Sidebar>
+  );
 }

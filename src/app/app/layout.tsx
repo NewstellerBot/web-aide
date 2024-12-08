@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/aide-sidebar";
+import AppSidebar from "@/components/flow/sidebar/index";
 
 export default async function Layout({
   children,
