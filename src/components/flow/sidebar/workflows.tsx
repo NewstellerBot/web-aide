@@ -1,10 +1,10 @@
 import { getAll } from "@/app/actions/db/workflow/get";
 import {
   SidebarMenuItem,
-  SidebarMenuButton,
   SidebarMenu,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
+import ActivateWorkflow from "./activate-workflow";
 
 export default async function Workflows() {
   const workflows = await getAll();
@@ -13,9 +13,7 @@ export default async function Workflows() {
     <SidebarMenu>
       {workflows.map((workflow) => (
         <SidebarMenuItem key={workflow.name}>
-          <SidebarMenuButton asChild>
-            <span>{workflow.name}</span>
-          </SidebarMenuButton>
+          <ActivateWorkflow workflow={workflow} />
         </SidebarMenuItem>
       ))}
     </SidebarMenu>

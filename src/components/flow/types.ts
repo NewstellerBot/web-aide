@@ -13,6 +13,7 @@ export type AideState = {
   nodes: Node[];
   edges: Edge[];
   currentType: NodeType;
+  workflow: string;
   viewport: Viewport;
   onNodesChange: OnNodesChange<Node>;
   onEdgesChange: OnEdgesChange;
@@ -20,6 +21,7 @@ export type AideState = {
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
   setPrompt: (nodeId: string, prompt: string) => void;
+  setWorkflow: (w: string) => void;
   createNode: (type: NodeType, position?: { x: number; y: number }) => void;
   setViewport: (v: Viewport) => void;
   setCurrentType: (t: NodeType) => void;

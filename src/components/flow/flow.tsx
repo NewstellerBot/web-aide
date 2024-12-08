@@ -28,12 +28,14 @@ const selector = (state: AideState) => ({
   onConnect: state.onConnect,
   setViewport: state.setViewport,
   createNode: state.createNode,
+  workflow: state.workflow,
 });
 
 export default function Flow() {
   const {
     viewport,
     nodes,
+    workflow,
     edges,
     onNodesChange,
     onEdgesChange,
@@ -43,23 +45,33 @@ export default function Flow() {
     currentType,
   } = useNodeStore(useShallow(selector));
 
+  if (workflow === "")
+    return (
+      <div className="flex h-[calc(100vh-36px)] w-screen items-center justify-center border-t bg-neutral-100">
+        <span className="text-4xl font-bold text-neutral-300">
+          No Workflow Chosen
+        </span>
+      </div>
+    );
+
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const { top, left } = (e.target as HTMLElement).getBoundingClientRect();
-
     const position = {
       x: (e.clientX - left - viewport.x) / viewport.zoom,
       y: (e.clientY - top - viewport.y) / viewport.zoom,
     };
-
-    console.log("current type: ", currentType);
-    console.log("nodes", nodes);
-
     createNode(currentType, position);
   };
 
   return (
     <div className="flex h-[calc(100vh-36px)] w-screen border-t">
+      <button
+        className="fixed left-10 top-0"
+        onClick={() => console.log(nodes, edges)}
+      >
+        Log
+      </button>
       <ReactFlow
         nodes={nodes}
         edges={edges}

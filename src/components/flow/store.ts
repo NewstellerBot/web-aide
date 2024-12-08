@@ -15,6 +15,7 @@ import { defaultPromptNode } from "@/components/flow/nodes/prompt";
 import { defaultDbNode } from "@/components/flow/nodes/db";
 
 import type { AideState, NodeType } from "./types";
+import { get } from "@/app/actions/db/workflow/get";
 
 const initialNodes = [] as Node[];
 const initialEdges = [] as Edge[];
@@ -40,7 +41,8 @@ const useNodeStore = create<AideState>()(
       y: 0,
       zoom: 1,
     },
-    currentType: "prompt",
+    workflow: "",
+    currentType: "prompt" as NodeType,
     onNodesChange: (changes) =>
       set({ nodes: applyNodeChanges(changes, get().nodes) }),
     onEdgesChange: (changes) => {
@@ -48,6 +50,7 @@ const useNodeStore = create<AideState>()(
         edges: applyEdgeChanges(changes, get().edges),
       });
     },
+    setWorkflow: (workflow) => set({ workflow }),
     onConnect: (connection) => {
       console.log(connection);
       set({
