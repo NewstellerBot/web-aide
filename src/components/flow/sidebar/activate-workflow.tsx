@@ -2,17 +2,24 @@
 
 import { useShallow } from "zustand/react/shallow";
 import { useState } from "react";
+import DOMPurify from "isomorphic-dompurify";
 
+import { cn } from "@/lib/utils";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import type { Workflow } from "@/app/actions/db/workflow/get";
 import { useNodeStore } from "@/components/flow/store";
 import { get } from "@/app/actions/db/workflow/get";
 import { upsert } from "@/app/actions/db/workflow/upsert";
-import DOMPurify from "isomorphic-dompurify";
 
 export default function ActivateWorkflow({ workflow }: { workflow: Workflow }) {
-  const { setWorkflow, setNodes, setEdges } = useNodeStore(
+  const {
+    setWorkflow,
+    setNodes,
+    setEdges,
+    workflow: activeWorkflow,
+  } = useNodeStore(
     useShallow((state) => ({
+      workflow: state.workflow,
       setWorkflow: state.setWorkflow,
       setNodes: state.setNodes,
       setEdges: state.setEdges,
@@ -23,6 +30,11 @@ export default function ActivateWorkflow({ workflow }: { workflow: Workflow }) {
   return (
     <>
       <SidebarMenuButton
+        className={cn(
+          "hover:cursor-pointer",
+          isContentEditable && "hover:cursor-text",
+        )}
+        variant={workflow.id === activeWorkflow ? "outline" : "default"}
         asChild
         onClick={async () => {
           setWorkflow(workflow.id);
