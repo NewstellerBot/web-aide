@@ -30,12 +30,14 @@ const NodeSchema = z.object({
   data: z.record(z.any(), z.any()),
   type: z.string(),
 });
+type Node = z.infer<typeof NodeSchema>;
 
 const EdgeSchema = z.object({
   id: z.string(),
   source: z.string(),
   target: z.string(),
 });
+type Edge = z.infer<typeof EdgeSchema>;
 
 const GetNodesResponseSchema = z.array(NodeSchema);
 const GetEdgesResponseSchema = z.array(EdgeSchema);
@@ -55,26 +57,25 @@ export async function get({ id }: { id: string }) {
                           LEFT JOIN edges e ON w.id = e.workflow_id
                           WHERE w.id = ${id}`;
 
-  let [nodes, edges] = await Promise.all([nodesPromise, edgesPromise]);
+  const [nodes, edges] = await Promise.all([nodesPromise, edgesPromise]);
 
-  nodes = nodes.flatMap((n) => {
+  const formattedNodes = nodes.flatMap((n) => {
     if (n.node_data === null) return [];
-    return {
-      ...n.node_data,
-    };
+    return n.node_data as Node;
   });
 
-  edges = edges.flatMap((e) => {
-    if (e.edge_id === null || e.source === null || e.target === null) return [];
+  const formattedEdges = edges.flatMap((e) => {
+    const { edge_id, source, target } = e;
+    if (!edge_id || !source || !target) return [];
     return {
-      id: e.edge_id,
-      source: e.source,
-      target: e.target,
-    };
+      id: edge_id as Edge["id"],
+      source: source as Edge["source"],
+      target: target as Edge["target"],
+    } as Edge;
   });
 
   return {
-    nodes: GetNodesResponseSchema.parse(nodes),
-    edges: GetEdgesResponseSchema.parse(edges),
+    nodes: GetNodesResponseSchema.parse(formattedNodes),
+    edges: GetEdgesResponseSchema.parse(formattedEdges),
   };
 }

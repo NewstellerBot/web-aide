@@ -1,13 +1,10 @@
 "use client";
 
 import { Handle, Position, type NodeProps } from "@xyflow/react";
-import { useShallow } from "zustand/react/shallow";
-import Image from "next/image";
 import { type Node } from "@xyflow/react";
 
 import { cn } from "@/lib/utils";
-import { useNodeStore } from "@/components/flow/store";
-// import { Spinner } from "@/components/ui/spinner";
+
 import {
   Select,
   SelectContent,

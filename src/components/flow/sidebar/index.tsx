@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { Plus } from "lucide-react";
 
 import Node from "./node";
 import {
@@ -11,7 +10,6 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarGroupAction,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 

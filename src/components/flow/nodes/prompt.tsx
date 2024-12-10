@@ -84,7 +84,9 @@ function PromptNode({
         <div className="mb-2">
           <Select
             defaultValue={data.model || "openai"}
-            onValueChange={(value) => {}}
+            onValueChange={() => {
+              console.log("TODO: implement changing model");
+            }}
           >
             <SelectTrigger className="w-full px-2 py-1 text-xs focus:border-slate-400 focus:ring-0">
               <SelectValue placeholder="Choose LLM..." />
