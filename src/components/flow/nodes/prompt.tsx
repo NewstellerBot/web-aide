@@ -1,13 +1,12 @@
 "use client";
 
-import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
 import { Clipboard } from "lucide-react";
-// import { marked } from "marked";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import Image from "next/image";
-import { type Node } from "@xyflow/react";
+import { v4 } from "uuid";
 
 import { cn } from "@/lib/utils";
 import { useNodeStore } from "@/components/flow/store";
@@ -20,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { v4 } from "uuid";
 
 export type Model = "openai" | "claude";
 
@@ -53,11 +51,11 @@ function PromptNode({
   selected,
   isConnectable,
 }: NodeProps<PromptNode>) {
-  const { node, setPrompt } = useNodeStore(
+  const { node, setPrompt, setModel } = useNodeStore(
     useShallow((state) => ({
       node: state.nodes.find((n) => n.id === id),
       setPrompt: state.setPrompt,
-      // setModel: state.
+      setModel: state.setModel,
     })),
   );
   if (!node) return null;
@@ -84,7 +82,8 @@ function PromptNode({
         <div className="mb-2">
           <Select
             defaultValue={data.model || "openai"}
-            onValueChange={() => {
+            onValueChange={(value) => {
+              setModel(id, value as Model);
               console.log("TODO: implement changing model");
             }}
           >

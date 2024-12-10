@@ -6,6 +6,7 @@ import type {
   Viewport,
   Node,
 } from "@xyflow/react";
+import { type Model } from "@/components/flow/nodes/prompt";
 
 export type NodeType = "prompt" | "db";
 
@@ -18,6 +19,7 @@ export type AideState = {
   onNodesChange: OnNodesChange<Node>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
+  setModel: (nodeId: string, model: Model) => void;
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
   setPrompt: (nodeId: string, prompt: string) => void;

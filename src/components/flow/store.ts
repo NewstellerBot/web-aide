@@ -56,7 +56,15 @@ const useNodeStore = create<AideState>()(
       }),
     setNodes: (nodes) => set({ nodes }),
     setEdges: (edges) => set({ edges }),
-
+    setModel: (nodeId, model) => {
+      set({
+        nodes: get().nodes.map((n) =>
+          n.id === nodeId && n.type === "prompt"
+            ? { ...n, data: { ...n.data, model } }
+            : n,
+        ),
+      });
+    },
     setPrompt: (nodeId, prompt) =>
       set({
         nodes: get().nodes.map((n) =>
