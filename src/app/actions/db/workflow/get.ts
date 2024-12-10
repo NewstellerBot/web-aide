@@ -16,7 +16,7 @@ export async function getAll() {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres URL provided!");
 
   const sql = neon(process.env.POSTGRES_URL);
-  const res = await sql`SELECT * FROM workflows;`;
+  const res = await sql`SELECT * FROM workflows ORDER BY created_at DESC;`;
   return WorkflowsSchema.parse(res);
 }
 

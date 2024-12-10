@@ -15,7 +15,6 @@ import { defaultPromptNode } from "@/components/flow/nodes/prompt";
 import { defaultDbNode } from "@/components/flow/nodes/db";
 
 import type { AideState, NodeType } from "./types";
-import { get } from "@/app/actions/db/workflow/get";
 
 const initialNodes = [] as Node[];
 const initialEdges = [] as Edge[];
@@ -51,17 +50,13 @@ const useNodeStore = create<AideState>()(
       });
     },
     setWorkflow: (workflow) => set({ workflow }),
-    onConnect: (connection) => {
-      console.log(connection);
+    onConnect: (connection) =>
       set({
         edges: addEdge(connection, get().edges),
-      });
-    },
+      }),
     setNodes: (nodes) => set({ nodes }),
-    setEdges: (edges) => {
-      console.log(edges);
-      set({ edges });
-    },
+    setEdges: (edges) => set({ edges }),
+
     setPrompt: (nodeId, prompt) =>
       set({
         nodes: get().nodes.map((n) =>
@@ -93,7 +88,12 @@ const useNodeStore = create<AideState>()(
   })),
 );
 
-useNodeStore.subscribe((state) => state.nodes, debounce(200, updateNodeDiff));
-useNodeStore.subscribe((state) => state.edges, debounce(200, updateEdgeDiff));
-
+useNodeStore.subscribe(
+  (state) => ({ nodes: state.nodes, workflow: state.workflow }),
+  debounce(200, updateNodeDiff),
+);
+useNodeStore.subscribe(
+  (state) => ({ edges: state.edges, workflow: state.workflow }),
+  debounce(100, updateEdgeDiff),
+);
 export { useNodeStore };

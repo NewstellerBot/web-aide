@@ -57,6 +57,7 @@ function PromptNode({
     useShallow((state) => ({
       node: state.nodes.find((n) => n.id === id),
       setPrompt: state.setPrompt,
+      // setModel: state.
     })),
   );
   if (!node) return null;
@@ -81,7 +82,10 @@ function PromptNode({
           Use this node for an LLM model.
         </label>
         <div className="mb-2">
-          <Select defaultValue="openai">
+          <Select
+            defaultValue={data.model || "openai"}
+            onValueChange={(value) => {}}
+          >
             <SelectTrigger className="w-full px-2 py-1 text-xs focus:border-slate-400 focus:ring-0">
               <SelectValue placeholder="Choose LLM..." />
             </SelectTrigger>
@@ -107,6 +111,7 @@ function PromptNode({
         <Textarea
           placeholder="Act as an expert in your summarization..."
           onChange={onChange}
+          value={data.prompt}
           disabled={data.isLoading}
         />
         {data.isLoading && <Spinner />}
@@ -121,7 +126,7 @@ function PromptNode({
             <p className="text-[10px] text-gray-500">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(""),
+                  __html: DOMPurify.sanitize(data.response ?? ""),
                 }}
               />
             </p>

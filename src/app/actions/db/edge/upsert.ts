@@ -3,7 +3,7 @@
 import { neon } from "@neondatabase/serverless";
 import { type Edge } from "@xyflow/react";
 
-export async function upsertEdges(edges: Edge[]) {
+export async function upsertEdges(edges: Edge[], workflowId: string) {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres url provided!");
   if (!edges || edges.length === 0) throw new Error("No edges to update!");
 
@@ -13,7 +13,7 @@ export async function upsertEdges(edges: Edge[]) {
       return sql`
         INSERT INTO edges (id, source, target, workflow_id)
         VALUES
-        (${edge.id}, ${edge.source}, ${edge.target}, '48f37b86-9117-4066-80b4-294b14029ddc')
+        (${edge.id}, ${edge.source}, ${edge.target}, ${workflowId})
         ON CONFLICT (id)
         DO UPDATE SET
             source = EXCLUDED.source,

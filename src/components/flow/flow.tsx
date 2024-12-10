@@ -47,7 +47,7 @@ export default function Flow() {
 
   if (workflow === "")
     return (
-      <div className="flex h-full items-center justify-center border-t bg-neutral-100">
+      <div className="flex h-[calc(100svh-3rem)] items-center justify-center border-t bg-neutral-100">
         <span className="text-4xl font-bold text-neutral-300">
           No Workflow Chosen
         </span>

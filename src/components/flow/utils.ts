@@ -34,7 +34,12 @@ export function computeChanges<T extends { id: string }>(
   return { upsertItems, deleteItems };
 }
 
-export const updateEdgeDiff = async (edges: Edge[], oldEdges: Edge[]) => {
+export const updateEdgeDiff = async (
+  data: { edges: Edge[]; workflow: string },
+  oldData: { edges: Edge[] },
+) => {
+  const { edges, workflow: workflowId } = data;
+  const { edges: oldEdges } = oldData;
   const { upsertItems: toUpsert, deleteItems: toDelete } = computeChanges(
     edges,
     oldEdges,
@@ -43,19 +48,24 @@ export const updateEdgeDiff = async (edges: Edge[], oldEdges: Edge[]) => {
 
   console.log("to update edges", toUpsert, toDelete);
   return await Promise.allSettled([
-    toUpsert.length > 0 && upsertEdges(toUpsert),
+    toUpsert.length > 0 && upsertEdges(toUpsert, workflowId),
     toDelete.length > 0 && deleteEdges(toDelete),
   ]);
 };
 
-export const updateNodeDiff = async (nodes: Node[], oldNodes: Node[]) => {
+export const updateNodeDiff = async (
+  data: { nodes: Node[]; workflow: string },
+  oldData: { nodes: Node[] },
+) => {
+  const { nodes, workflow } = data;
+  const { nodes: oldNodes } = oldData;
   const { upsertItems: toUpsert, deleteItems: toDelete } = computeChanges(
     nodes,
     oldNodes,
     (a, b) => a === b,
   );
   return await Promise.allSettled([
-    toUpsert.length > 0 && updateNodes(toUpsert),
+    toUpsert.length > 0 && updateNodes(toUpsert, workflow),
     toDelete.length > 0 && deleteNodes(toDelete),
   ]);
 };

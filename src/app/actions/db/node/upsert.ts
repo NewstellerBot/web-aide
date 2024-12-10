@@ -3,7 +3,7 @@
 import { neon } from "@neondatabase/serverless";
 import { type Node } from "@xyflow/react";
 
-export async function updateNodes(nodes: Node[]) {
+export async function updateNodes(nodes: Node[], workflowId: string) {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres url provided!");
   if (!nodes || nodes.length === 0) throw new Error("No nodes to update!");
 
@@ -13,7 +13,7 @@ export async function updateNodes(nodes: Node[]) {
       return sql`
         INSERT INTO nodes (id, data, workflow_id)
         VALUES
-        (${n.id}, ${JSON.stringify(n)}, '48f37b86-9117-4066-80b4-294b14029ddc')
+        (${n.id}, ${JSON.stringify(n)}, ${workflowId})
         ON CONFLICT (id)
         DO UPDATE SET
             data = EXCLUDED.data;

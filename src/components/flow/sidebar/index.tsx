@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import Node from "./node";
 import {
@@ -11,15 +11,13 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
+  SidebarGroupAction,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+
 import { type NodeType } from "../types";
 import Workflows, { NavProjectsSkeleton } from "./workflows";
+import NewWorkflow from "./new-worfklow";
 
 const nodes = [
   { type: "prompt", label: "💬 LLM model" },
@@ -53,23 +51,17 @@ export default async function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <Collapsible defaultOpen className="group/collapsible">
-          <SidebarGroup>
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger>
-                Workflows
-                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <React.Suspense fallback={<NavProjectsSkeleton />}>
-                  <Workflows />
-                </React.Suspense>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
+        <SidebarGroup>
+          <SidebarGroupLabel asChild>
+            <span>Workflows</span>
+          </SidebarGroupLabel>
+          <NewWorkflow />
+          <SidebarGroupContent>
+            <React.Suspense fallback={<NavProjectsSkeleton />}>
+              <Workflows />
+            </React.Suspense>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
