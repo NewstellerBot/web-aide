@@ -53,7 +53,13 @@ export async function executeGraph({
       const prompt = node?.data?.prompt as string;
       const model = node.data?.model as Model;
       if (!!prompt && !!model)
-        promises.push({ node: node, promise: llm.generate(prompt, model) });
+        promises.push({
+          node: node,
+          promise: llm.generate(
+            [prompt, ...node.context].join("\n---\n"),
+            model,
+          ),
+        });
 
       q.extract();
       if (q.heap.length === 0) break;
