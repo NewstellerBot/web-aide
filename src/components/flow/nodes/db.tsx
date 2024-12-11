@@ -43,10 +43,10 @@ function DbNode({ isConnectable, selected }: NodeProps<DbNode>) {
       )}
     >
       <div>
-        <h1 className="block font-semibold tracking-tight">Prompt</h1>
-        <label htmlFor="text" className="text-[10px] text-gray-500">
-          Use this node for an LLM model.
-        </label>
+        <h1 className="block font-semibold tracking-tight">Knowledgebase</h1>
+        <p className="my-2 text-[10px] text-gray-500">
+          Use this node to retrieve information from your knowledgebase.
+        </p>
 
         <div className="mb-2">
           <Select defaultValue="openai">
@@ -63,10 +63,6 @@ function DbNode({ isConnectable, selected }: NodeProps<DbNode>) {
             </SelectContent>
           </Select>
         </div>
-
-        <label htmlFor="text" className="text-[10px] text-gray-500">
-          Describe how the LLM should act.
-        </label>
       </div>
 
       <Handle
@@ -74,11 +70,11 @@ function DbNode({ isConnectable, selected }: NodeProps<DbNode>) {
         position={Position.Right}
         isConnectable={isConnectable}
       />
-      <Handle
+      {/* <Handle
         type="target"
         position={Position.Left}
         isConnectable={isConnectable}
-      />
+      /> */}
     </div>
   );
 }

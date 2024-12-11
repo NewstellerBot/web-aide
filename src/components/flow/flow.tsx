@@ -10,6 +10,7 @@ import { useNodeStore } from "@/components/flow/store";
 import PromptNode from "@/components/flow/nodes/prompt";
 import { preventDefault } from "@/lib/utils";
 import DbNode from "@/components/flow/nodes/db";
+import { executeGraph } from "@/app/actions/llm/execute";
 
 import { type AideState } from "./types";
 
@@ -67,8 +68,13 @@ export default function Flow() {
   return (
     <div className="flex h-[calc(100svh-3rem)] border-t">
       <button
-        className="fixed left-10 top-0"
-        onClick={() => console.log(nodes, edges)}
+        className="fixed right-10 top-0"
+        onClick={async () => {
+          await executeGraph({
+            nodes,
+            edges,
+          });
+        }}
       >
         Log
       </button>

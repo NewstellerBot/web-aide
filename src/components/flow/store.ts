@@ -8,9 +8,6 @@ import {
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
-import { debounce } from "@/lib/utils";
-import { updateNodeDiff } from "@/components/flow/utils";
-import { updateEdgeDiff } from "@/components/flow/utils";
 import { defaultPromptNode } from "@/components/flow/nodes/prompt";
 import { defaultDbNode } from "@/components/flow/nodes/db";
 
@@ -96,12 +93,4 @@ const useNodeStore = create<AideState>()(
   })),
 );
 
-useNodeStore.subscribe(
-  (state) => ({ nodes: state.nodes, workflow: state.workflow }),
-  debounce(200, updateNodeDiff),
-);
-useNodeStore.subscribe(
-  (state) => ({ edges: state.edges, workflow: state.workflow }),
-  debounce(100, updateEdgeDiff),
-);
 export { useNodeStore };

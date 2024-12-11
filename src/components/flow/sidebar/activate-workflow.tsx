@@ -1,7 +1,7 @@
 "use client";
 
 import { useShallow } from "zustand/react/shallow";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DOMPurify from "isomorphic-dompurify";
 
 import { cn } from "@/lib/utils";
@@ -10,6 +10,9 @@ import type { Workflow } from "@/app/actions/db/workflow/get";
 import { useNodeStore } from "@/components/flow/store";
 import { get } from "@/app/actions/db/workflow/get";
 import { upsert } from "@/app/actions/db/workflow/upsert";
+import { debounce } from "@/lib/utils";
+import { updateNodeDiff } from "@/components/flow/utils";
+import { updateEdgeDiff } from "@/components/flow/utils";
 
 export default function ActivateWorkflow({ workflow }: { workflow: Workflow }) {
   const {
@@ -27,6 +30,12 @@ export default function ActivateWorkflow({ workflow }: { workflow: Workflow }) {
   );
   const [isContentEditable, setIsContentEditable] = useState(false);
   const [name, setName] = useState(workflow.name);
+  const unsubRef = useRef<() => void>();
+
+  useEffect(() => {
+    if (!!unsubRef.current) unsubRef.current();
+  });
+
   return (
     <>
       <SidebarMenuButton
@@ -39,9 +48,31 @@ export default function ActivateWorkflow({ workflow }: { workflow: Workflow }) {
         onClick={async () => {
           setWorkflow(workflow.id);
           const { nodes, edges } = await get({ id: workflow.id });
-
           setNodes(nodes);
           setEdges(edges);
+
+          const unsubNodes = useNodeStore.subscribe(
+            (state) => ({ nodes: state.nodes, workflow: state.workflow }),
+            debounce(200, updateNodeDiff),
+            {
+              equalityFn: (a, b) =>
+                JSON.stringify(a.nodes) === JSON.stringify(b.nodes),
+            },
+          );
+
+          const unsubEdges = useNodeStore.subscribe(
+            (state) => ({ edges: state.edges, workflow: state.workflow }),
+            debounce(100, updateEdgeDiff),
+            {
+              equalityFn: (a, b) =>
+                JSON.stringify(a.edges) === JSON.stringify(b.edges),
+            },
+          );
+
+          unsubRef.current = () => {
+            unsubEdges();
+            unsubNodes();
+          };
         }}
       >
         <span

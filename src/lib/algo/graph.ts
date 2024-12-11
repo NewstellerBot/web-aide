@@ -1,17 +1,17 @@
-interface Node<T, N> {
+type Node<T, N> = {
   id: T;
-  data?: N; // Node can hold additional data
-}
+  data?: N;
+};
 
-interface Edge<T> {
+type Edge<T> = {
   source: T;
   target: T;
-}
+};
 
-interface QueueNode<T, N> extends Node<T, N> {
+export type QueueNode<T, N> = Node<T, N> & {
   dependencies: T[];
-  context: T[];
-}
+  context: string[];
+};
 
 class Graph<T, N> {
   adjacencyList: Map<T, T[]>;
@@ -27,7 +27,7 @@ class Graph<T, N> {
     this.buildGraph();
   }
 
-  buildGraph(): void {
+  private buildGraph(): void {
     this.nodes.forEach((node) => {
       this.adjacencyList.set(node.id, []);
     });
@@ -93,7 +93,7 @@ class Graph<T, N> {
     const queue: QueueNode<T, N>[] = this.nodes.map((node) => ({
       ...node,
       dependencies: [] as T[],
-      context: [] as T[],
+      context: [],
     }));
 
     queue.forEach((node) => {
