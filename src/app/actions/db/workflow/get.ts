@@ -66,20 +66,19 @@ export async function get({ id }: { id: string }) {
         message: "No user found",
       });
 
-    const workflow =
-      await sql`SELECT * FROM workflows WHERE id = ${id} AND user_id = ${user.id}`;
+    const workflow = await sql`SELECT * FROM workflows WHERE id = ${id};`;
     if (!workflow || workflow.length === 0 || !workflow[0]?.id)
       throw new AideError({ name: "DB_ERROR", message: "Workflow not found." });
 
     const nodesPromise = sql`SELECT n.data AS node_data
       FROM workflows w
       LEFT JOIN nodes n ON w.id = n.workflow_id
-      WHERE w.id = ${id} and w.user_id = ${user.id}`;
+      WHERE w.id = ${id};`;
 
     const edgesPromise = sql`SELECT e.id AS edge_id, e.source, e.target
                           FROM workflows w
                           LEFT JOIN edges e ON w.id = e.workflow_id
-                          WHERE w.id = ${id} and w.user_id = ${user.id}`;
+                          WHERE w.id = ${id};`;
 
     const [nodes, edges] = await Promise.all([nodesPromise, edgesPromise]);
 

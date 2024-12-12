@@ -11,9 +11,7 @@ export async function POST(
     const id = (await params).id;
     const context = (await request.json()) as Payload;
     const { nodes, edges } = await get({ id });
-
     const response = await executeGraph({ nodes, edges, context });
-    console.log(response);
     return Response.json(response);
   } catch (e) {
     // console.error(e);
