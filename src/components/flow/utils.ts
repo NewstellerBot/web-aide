@@ -3,6 +3,7 @@ import { upsertEdges } from "@/app/actions/db/edge/upsert";
 import { deleteEdges } from "@/app/actions/db/edge/delete";
 import { updateNodes } from "@/app/actions/db/node/upsert";
 import { deleteNodes } from "@/app/actions/db/node/delete";
+import { Workflow } from "@/app/actions/db/workflow/get";
 
 export function computeChanges<T extends { id: string }>(
   newItems: T[],
@@ -35,10 +36,10 @@ export function computeChanges<T extends { id: string }>(
 }
 
 export const updateEdgeDiff = async (
-  data: { edges: Edge[]; workflow: string },
+  data: { edges: Edge[]; workflow: Workflow },
   oldData: { edges: Edge[] },
 ) => {
-  const { edges, workflow: workflowId } = data;
+  const { edges, workflow } = data;
   const { edges: oldEdges } = oldData;
   const { upsertItems: toUpsert, deleteItems: toDelete } = computeChanges(
     edges,
@@ -48,13 +49,13 @@ export const updateEdgeDiff = async (
 
   console.log("to update edges", toUpsert, toDelete);
   return await Promise.allSettled([
-    toUpsert.length > 0 && upsertEdges(toUpsert, workflowId),
+    toUpsert.length > 0 && upsertEdges(toUpsert, workflow.id),
     toDelete.length > 0 && deleteEdges(toDelete),
   ]);
 };
 
 export const updateNodeDiff = async (
-  data: { nodes: Node[]; workflow: string },
+  data: { nodes: Node[]; workflow: Workflow },
   oldData: { nodes: Node[] },
 ) => {
   const { nodes, workflow } = data;
@@ -65,7 +66,7 @@ export const updateNodeDiff = async (
     (a, b) => a === b,
   );
   return await Promise.allSettled([
-    toUpsert.length > 0 && updateNodes(toUpsert, workflow),
+    toUpsert.length > 0 && updateNodes(toUpsert, workflow.id),
     toDelete.length > 0 && deleteNodes(toDelete),
   ]);
 };
