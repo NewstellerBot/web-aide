@@ -58,14 +58,6 @@ export async function get({ id }: { id: string }) {
 
   try {
     const sql = neon(process.env.POSTGRES_URL);
-    const user = await currentUser();
-
-    if (!user)
-      throw new AideError({
-        name: "EXECUTION_ERROR",
-        message: "No user found",
-      });
-
     const workflow = await sql`SELECT * FROM workflows WHERE id = ${id};`;
     if (!workflow || workflow.length === 0 || !workflow[0]?.id)
       throw new AideError({ name: "DB_ERROR", message: "Workflow not found." });
@@ -102,6 +94,7 @@ export async function get({ id }: { id: string }) {
       edges: GetEdgesResponseSchema.parse(formattedEdges),
     };
   } catch (e) {
+    console.error(e);
     throw new AideError({
       name: "DB_ERROR",
       message: "Failed to retrieve workflow from db.",
