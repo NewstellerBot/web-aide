@@ -3,7 +3,7 @@ import { upsertEdges } from "@/app/actions/db/edge/upsert";
 import { deleteEdges } from "@/app/actions/db/edge/delete";
 import { updateNodes } from "@/app/actions/db/node/upsert";
 import { deleteNodes } from "@/app/actions/db/node/delete";
-import { Workflow } from "@/app/actions/db/workflow/get";
+import { type Workflow } from "@/app/actions/db/workflow/get";
 
 export function computeChanges<T extends { id: string }>(
   newItems: T[],

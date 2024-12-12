@@ -2,6 +2,9 @@
 
 import { neon } from "@neondatabase/serverless";
 import { type Node } from "@xyflow/react";
+import { currentUser } from "@clerk/nextjs/server";
+
+import { AideError } from "@/lib/errors";
 
 export async function deleteNodes(nodes: Node[]) {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres URL provided!");
@@ -9,11 +12,18 @@ export async function deleteNodes(nodes: Node[]) {
 
   try {
     const sql = neon(process.env.POSTGRES_URL);
+    const user = await currentUser();
+
+    if (!user)
+      throw new AideError({
+        name: "EXECUTION_ERROR",
+        message: "No user found",
+      });
 
     const deletePromises = nodes.map((n) => {
       return sql`
         DELETE FROM nodes
-        WHERE id = ${n.id};
+        WHERE id = ${n.id} AND user_id = ${user.id};
       `;
     });
 

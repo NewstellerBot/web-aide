@@ -2,6 +2,8 @@
 
 import { neon } from "@neondatabase/serverless";
 import { type Edge } from "@xyflow/react";
+import { currentUser } from "@clerk/nextjs/server";
+import { AideError } from "@/lib/errors";
 
 export async function upsertEdges(edges: Edge[], workflowId: string) {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres url provided!");
@@ -9,11 +11,18 @@ export async function upsertEdges(edges: Edge[], workflowId: string) {
 
   try {
     const sql = neon(process.env.POSTGRES_URL);
+    const user = await currentUser();
+
+    if (!user)
+      throw new AideError({
+        name: "EXECUTION_ERROR",
+        message: "No user found",
+      });
     const savePromises = edges.map((edge) => {
       return sql`
-        INSERT INTO edges (id, source, target, workflow_id)
+        INSERT INTO edges (id, source, target, workflow_id, user_id)
         VALUES
-        (${edge.id}, ${edge.source}, ${edge.target}, ${workflowId})
+        (${edge.id}, ${edge.source}, ${edge.target}, ${workflowId}, ${user.id})
         ON CONFLICT (id)
         DO UPDATE SET
             source = EXCLUDED.source,
