@@ -10,6 +10,8 @@ import { subscribeWithSelector } from "zustand/middleware";
 
 import { defaultPromptNode } from "@/components/flow/nodes/prompt";
 import { defaultDbNode } from "@/components/flow/nodes/db";
+import { defaultInputNode } from "@/components/flow/nodes/input";
+import { defaultOutputNode } from "@/components/flow/nodes/output";
 
 import type { AideState, NodeType } from "./types";
 
@@ -22,6 +24,10 @@ const defaultNode = (type: NodeType): Node => {
       return defaultPromptNode();
     case "db":
       return defaultDbNode();
+    case "APIInput":
+      return defaultInputNode();
+    case "APIOutput":
+      return defaultOutputNode();
     default:
       // figure out what to do in this case; technically should never occur
       throw new Error("Unknown type specified");
@@ -37,7 +43,7 @@ const useNodeStore = create<AideState>()(
       y: 0,
       zoom: 1,
     },
-    workflow: "",
+    workflow: { name: "", id: "" },
     currentType: "prompt" as NodeType,
     onNodesChange: (changes) =>
       set({ nodes: applyNodeChanges(changes, get().nodes) }),
@@ -89,6 +95,16 @@ const useNodeStore = create<AideState>()(
             ? { ...n, data: { ...n.data, db: t } }
             : n,
         ),
+      }),
+    setAPINodeName: (nodeId, name) =>
+      set({
+        nodes: get().nodes.map((n) => {
+          console.log(nodeId, n.id, n.type);
+          return n.id === nodeId &&
+            (n.type === "APIInput" || n.type === "APIOutput")
+            ? { ...n, data: { ...n.data, name } }
+            : n;
+        }),
       }),
   })),
 );

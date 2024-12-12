@@ -7,16 +7,20 @@ import { useShallow } from "zustand/react/shallow";
 import { type DragEvent } from "react";
 
 import { useNodeStore } from "@/components/flow/store";
-import PromptNode from "@/components/flow/nodes/prompt";
 import { preventDefault } from "@/lib/utils";
-import DbNode from "@/components/flow/nodes/db";
 import { executeGraph } from "@/app/actions/llm/execute";
 
+import PromptNode from "@/components/flow/nodes/prompt";
+import DbNode from "@/components/flow/nodes/db";
+import InputNode from "@/components/flow/nodes/input";
+import OutputNode from "@/components/flow/nodes/output";
 import { type AideState } from "./types";
 
 const nodeTypes: NodeTypes = {
   prompt: PromptNode,
   db: DbNode,
+  APIInput: InputNode,
+  APIOutput: OutputNode,
 };
 
 const selector = (state: AideState) => ({
@@ -46,7 +50,7 @@ export default function Flow() {
     currentType,
   } = useNodeStore(useShallow(selector));
 
-  if (workflow === "")
+  if (workflow.id === "")
     return (
       <div className="flex h-[calc(100svh-3rem)] items-center justify-center border-t bg-neutral-100">
         <span className="text-4xl font-bold text-neutral-300">
@@ -67,17 +71,6 @@ export default function Flow() {
 
   return (
     <div className="flex h-[calc(100svh-3rem)] border-t">
-      <button
-        className="fixed right-10 top-0"
-        onClick={async () => {
-          await executeGraph({
-            nodes,
-            edges,
-          });
-        }}
-      >
-        Log
-      </button>
       <ReactFlow
         nodes={nodes}
         edges={edges}

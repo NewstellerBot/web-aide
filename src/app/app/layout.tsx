@@ -5,6 +5,7 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/flow/sidebar/index";
+import FlowLink from "@/components/flow/sidebar/flow-link";
 
 export default async function Layout({
   children,
@@ -18,9 +19,10 @@ export default async function Layout({
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <SidebarInset>
-        <main className="">
-          <div className="p-0.5">
+        <main>
+          <div className="flex items-center justify-between p-0.5">
             <SidebarTrigger />
+            <FlowLink />
           </div>
           {children}
         </main>

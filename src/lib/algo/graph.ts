@@ -1,4 +1,6 @@
-type Node<T, N> = {
+import { type Node as XyflowNode } from "@xyflow/react";
+
+type Node<T, N> = XyflowNode & {
   id: T;
   data?: N;
 };
@@ -11,6 +13,7 @@ type Edge<T> = {
 export type QueueNode<T, N> = Node<T, N> & {
   dependencies: T[];
   context: string[];
+  isTerminal?: boolean;
 };
 
 class Graph<T, N> {

@@ -43,10 +43,10 @@ export default function ActivateWorkflow({ workflow }: { workflow: Workflow }) {
           "hover:cursor-pointer",
           isContentEditable && "hover:cursor-text",
         )}
-        variant={workflow.id === activeWorkflow ? "outline" : "default"}
+        variant={workflow.id === activeWorkflow.id ? "outline" : "default"}
         asChild
         onClick={async () => {
-          setWorkflow(workflow.id);
+          setWorkflow(workflow);
           const { nodes, edges } = await get({ id: workflow.id });
           setNodes(nodes);
           setEdges(edges);

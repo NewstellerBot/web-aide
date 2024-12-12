@@ -20,6 +20,8 @@ import NewWorkflow from "./new-worfklow";
 const nodes = [
   { type: "prompt", label: "💬 LLM model" },
   { type: "db", label: "💿 Knowledgebase" },
+  { type: "APIInput", label: "🔌 API input" },
+  { type: "APIOutput", label: "📬 API output" },
 ];
 
 export default async function AppSidebar() {
