@@ -8,7 +8,6 @@ import { type DragEvent } from "react";
 
 import { useNodeStore } from "@/components/flow/store";
 import { preventDefault } from "@/lib/utils";
-import { executeGraph } from "@/app/actions/llm/execute";
 
 import PromptNode from "@/components/flow/nodes/prompt";
 import DbNode from "@/components/flow/nodes/db";

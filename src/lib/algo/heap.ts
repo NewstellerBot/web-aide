@@ -2,7 +2,7 @@ class Heap<T> {
   heap: T[];
   private comparator: (a: T, b: T) => number;
   // alias for extract
-  pop = this.extract;
+  pop = () => this.extract();
 
   constructor(heap: T[] = [], comparator: (a: T, b: T) => number) {
     this.heap = [...heap];
