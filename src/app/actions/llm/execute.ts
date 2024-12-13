@@ -40,6 +40,11 @@ export async function executeGraph({
   response?: Record<string, string>;
 }) {
   const graph = new Graph(nodes, edges);
+  if (graph.isCyclical())
+    throw new AideError({
+      name: "EXECUTION_ERROR",
+      message: "Graph is cyclical",
+    });
   const q = new Heap(
     graph.buildQueue(),
     (
