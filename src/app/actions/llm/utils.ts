@@ -33,10 +33,12 @@ export const prepareForExecution = (
       });
 
     case "prompt":
-      return llm.generate(
-        [node.data.prompt, ...node.context].join("\n----\n"),
-        node.data.model as Model,
-      );
+      return llm
+        .generate(
+          [node.data.prompt, ...node.context].join("\n----\n"),
+          node.data.model as Model,
+        )
+        .then((res) => res.response);
 
     case "APIOutput":
       return new Promise((resolve, reject) => {
