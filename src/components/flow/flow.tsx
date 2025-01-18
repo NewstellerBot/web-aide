@@ -14,6 +14,7 @@ import DbNode from "@/components/flow/nodes/db";
 import InputNode from "@/components/flow/nodes/input";
 import OutputNode from "@/components/flow/nodes/output";
 import { type AideState } from "./types";
+import { Spinner } from "../ui/spinner";
 
 const nodeTypes: NodeTypes = {
   prompt: PromptNode,
@@ -33,6 +34,7 @@ const selector = (state: AideState) => ({
   setViewport: state.setViewport,
   createNode: state.createNode,
   workflow: state.workflow,
+  isWorkflowLoading: state.isWorkflowLoading,
 });
 
 export default function Flow() {
@@ -47,6 +49,7 @@ export default function Flow() {
     onConnect,
     createNode,
     currentType,
+    isWorkflowLoading,
   } = useNodeStore(useShallow(selector));
 
   if (workflow.id === "")
@@ -57,6 +60,14 @@ export default function Flow() {
         </span>
       </div>
     );
+
+  if (isWorkflowLoading) {
+    return (
+      <div className="flex h-[calc(100svh-3rem)] items-center justify-center border-t bg-neutral-100">
+        <Spinner />
+      </div>
+    );
+  }
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();

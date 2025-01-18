@@ -45,6 +45,7 @@ const useNodeStore = create<AideState>()(
     },
     workflow: { name: "", id: "" },
     currentType: "prompt" as NodeType,
+    isWorkflowLoading: false,
     onNodesChange: (changes) =>
       set({ nodes: applyNodeChanges(changes, get().nodes) }),
     onEdgesChange: (changes) => {
@@ -106,6 +107,7 @@ const useNodeStore = create<AideState>()(
             : n;
         }),
       }),
+    setIsWorkflowLoading: (isLoading) => set({ isWorkflowLoading: isLoading }),
   })),
 );
 

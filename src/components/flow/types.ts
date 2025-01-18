@@ -17,6 +17,7 @@ export type AideState = {
   currentType: NodeType;
   workflow: Workflow;
   viewport: Viewport;
+  isWorkflowLoading: boolean;
   onNodesChange: OnNodesChange<Node>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
@@ -30,4 +31,5 @@ export type AideState = {
   setCurrentType: (t: NodeType) => void;
   setDbType: (nodeId: string, t: "string") => void;
   setAPINodeName: (nodeId: string, name: string) => void;
+  setIsWorkflowLoading: (isLoading: boolean) => void;
 };

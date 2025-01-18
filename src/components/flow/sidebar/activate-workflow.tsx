@@ -20,12 +20,14 @@ export default function ActivateWorkflow({ workflow }: { workflow: Workflow }) {
     setNodes,
     setEdges,
     workflow: activeWorkflow,
+    setIsWorkflowLoading,
   } = useNodeStore(
     useShallow((state) => ({
       workflow: state.workflow,
       setWorkflow: state.setWorkflow,
       setNodes: state.setNodes,
       setEdges: state.setEdges,
+      setIsWorkflowLoading: state.setIsWorkflowLoading,
     })),
   );
   const [isContentEditable, setIsContentEditable] = useState(false);
@@ -46,6 +48,7 @@ export default function ActivateWorkflow({ workflow }: { workflow: Workflow }) {
         variant={workflow.id === activeWorkflow.id ? "outline" : "default"}
         asChild
         onClick={async () => {
+          setIsWorkflowLoading(true);
           setWorkflow(workflow);
           const { nodes, edges } = await get({ id: workflow.id });
           setNodes(nodes);
@@ -73,6 +76,7 @@ export default function ActivateWorkflow({ workflow }: { workflow: Workflow }) {
             unsubEdges();
             unsubNodes();
           };
+          setIsWorkflowLoading(false);
         }}
       >
         <span

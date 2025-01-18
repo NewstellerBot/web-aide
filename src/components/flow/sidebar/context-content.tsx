@@ -9,8 +9,7 @@ export default function ContextContent({ workflow }: { workflow: Workflow }) {
     <>
       <ContextMenuItem
         onClick={async () => {
-          const res = await deleteWorkflow(workflow.id);
-          console.log(res);
+          await deleteWorkflow(workflow.id);
         }}
       >
         Delete
