@@ -31,6 +31,7 @@ const baseMessageSchema = z.object({
   forward_origin: messageOriginSchema.optional(),
   is_topic_message: z.boolean().optional(),
   is_automatic_forward: z.boolean().optional(),
+  text: z.string().optional(),
 });
 
 type Message = z.infer<typeof baseMessageSchema>;
