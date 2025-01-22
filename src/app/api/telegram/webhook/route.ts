@@ -8,4 +8,6 @@ export async function POST(req: Request) {
   }
   const tg = parseResult.data;
   console.log(tg);
+
+  return Response.json({ success: true });
 }
