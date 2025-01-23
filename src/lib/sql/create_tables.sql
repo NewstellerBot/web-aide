@@ -21,3 +21,12 @@ CREATE TABLE IF NOT EXISTS edges (
     user_id VARCHAR(128),
     CONSTRAINT fk_workflow_edges FOREIGN KEY(workflow_id) REFERENCES workflows(id) ON DELETE CASCADE
 );
+CREATE TABLE IF NOT EXISTS knowledge (
+    id VARCHAR(128) DEFAULT gen_random_uuid() PRIMARY KEY,
+    name VARCHAR(256)
+);
+CREATE EXTENSION vector;
+CREATE TABLE items (
+    id BIGSERIAL PRIMARY KEY,
+    embedding VECTOR(1536)
+);
