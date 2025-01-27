@@ -1,5 +1,3 @@
-import Flow from "@/components/flow/flow";
-
 export default function Page() {
-  return <Flow />;
+  return <>Please choose a workflow</>;
 }
