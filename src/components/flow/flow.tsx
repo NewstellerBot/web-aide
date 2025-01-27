@@ -2,11 +2,18 @@
 
 import "@xyflow/react/dist/style.css";
 
-import { ReactFlow, Background, Controls, type NodeTypes } from "@xyflow/react";
+import {
+  ReactFlow,
+  Background,
+  Controls,
+  type NodeTypes,
+  type Edge,
+  type Node,
+} from "@xyflow/react";
 import { useShallow } from "zustand/react/shallow";
-import { type DragEvent } from "react";
+import { type DragEvent, useEffect } from "react";
 
-import { useNodeStore } from "@/components/flow/store";
+import { useNodeStore, defaultStoreValues } from "@/components/flow/store";
 import { preventDefault } from "@/lib/utils";
 
 import PromptNode from "@/components/flow/nodes/prompt";
@@ -15,6 +22,8 @@ import InputNode from "@/components/flow/nodes/input";
 import OutputNode from "@/components/flow/nodes/output";
 import { type AideState } from "./types";
 import { Spinner } from "../ui/spinner";
+import { updateNodeDiff, updateEdgeDiff } from "./utils";
+import { debounce } from "@/lib/utils";
 
 const nodeTypes: NodeTypes = {
   prompt: PromptNode,
@@ -33,15 +42,31 @@ const selector = (state: AideState) => ({
   onConnect: state.onConnect,
   setViewport: state.setViewport,
   createNode: state.createNode,
-  workflow: state.workflow,
-  isWorkflowLoading: state.isWorkflowLoading,
+  setNodes: state.setNodes,
+  setEdges: state.setEdges,
+  setWorkflow: state.setWorkflow,
 });
 
-export default function Flow() {
+export function FlowSkeleton() {
+  return (
+    <div className="flex h-[calc(100svh-3rem)] items-center justify-center border-t bg-neutral-100">
+      <Spinner />
+    </div>
+  );
+}
+
+export default function Flow({
+  initialNodes,
+  initialEdges,
+  workflowId,
+}: {
+  initialNodes: Node[];
+  initialEdges: Edge[];
+  workflowId: string;
+}) {
   const {
     viewport,
     nodes,
-    workflow,
     edges,
     onNodesChange,
     onEdgesChange,
@@ -49,25 +74,38 @@ export default function Flow() {
     onConnect,
     createNode,
     currentType,
-    isWorkflowLoading,
+    setNodes,
+    setEdges,
+    setWorkflow,
   } = useNodeStore(useShallow(selector));
 
-  if (workflow.id === "")
-    return (
-      <div className="flex h-[calc(100svh-3rem)] items-center justify-center border-t bg-neutral-100">
-        <span className="text-4xl font-bold text-neutral-300">
-          No Workflow Chosen
-        </span>
-      </div>
+  useEffect(() => {
+    setNodes(initialNodes);
+    setEdges(initialEdges);
+    setWorkflow({ id: workflowId, name: "" });
+
+    const unsubNodes = useNodeStore.subscribe(
+      (state) => ({ nodes: state.nodes, workflow: state.workflow }),
+      debounce(200, updateNodeDiff),
+      // debounce(200, console.log),
+      { equalityFn: (a, b) => a.nodes === b.nodes, fireImmediately: false },
     );
 
-  if (isWorkflowLoading) {
-    return (
-      <div className="flex h-[calc(100svh-3rem)] items-center justify-center border-t bg-neutral-100">
-        <Spinner />
-      </div>
+    const unsubEdges = useNodeStore.subscribe(
+      (state) => ({ edges: state.edges, workflow: state.workflow }),
+      debounce(300, updateEdgeDiff),
+      { equalityFn: (a, b) => a.edges === b.edges, fireImmediately: false },
     );
-  }
+
+    return () => {
+      unsubNodes();
+      unsubEdges();
+      useNodeStore.setState((s) => ({
+        ...s,
+        ...defaultStoreValues(),
+      }));
+    };
+  }, [initialEdges, initialNodes, workflowId, setNodes, setEdges, setWorkflow]);
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();

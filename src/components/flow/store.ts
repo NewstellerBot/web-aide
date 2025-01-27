@@ -111,4 +111,16 @@ const useNodeStore = create<AideState>()(
   })),
 );
 
-export { useNodeStore };
+const defaultStoreValues = () => ({
+  nodes: initialNodes,
+  edges: initialEdges,
+  workflow: { name: "", id: "" },
+  viewport: {
+    x: 0,
+    y: 0,
+    zoom: 1,
+  },
+  isWorkflowLoading: false,
+});
+
+export { useNodeStore, defaultStoreValues };

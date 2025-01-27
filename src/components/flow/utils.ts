@@ -58,6 +58,11 @@ export const updateNodeDiff = async (
   data: { nodes: Node[]; workflow: Workflow },
   oldData: { nodes: Node[] },
 ) => {
+  console.log("update nodes fired!");
+  console.log(
+    "nodes to update: ",
+    data.nodes.map((n) => n.id),
+  );
   const { nodes, workflow } = data;
   const { nodes: oldNodes } = oldData;
   const { upsertItems: toUpsert, deleteItems: toDelete } = computeChanges(
@@ -65,7 +70,7 @@ export const updateNodeDiff = async (
     oldNodes,
     (a, b) => a === b,
   );
-  return await Promise.allSettled([
+  return await Promise.all([
     toUpsert.length > 0 && updateNodes(toUpsert, workflow.id),
     toDelete.length > 0 && deleteNodes(toDelete),
   ]);
