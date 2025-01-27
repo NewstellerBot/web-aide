@@ -27,7 +27,7 @@ export async function getAll() {
 
   const sql = neon(process.env.POSTGRES_URL);
   const res =
-    await sql`SELECT * FROM workflows WHERE user_id=${user.id} ORDER BY created_at DESC;`;
+    await sql`SELECT * FROM workflows WHERE user_id=${user.id} ORDER BY timestamp DESC;`;
   return WorkflowsSchema.parse(res);
 }
 

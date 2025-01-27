@@ -25,9 +25,7 @@ export async function deleteEdges(edges: Edge[]) {
         WHERE id = ${edge.id} AND user_id = ${user.id};
       `;
     });
-
-    const results = await Promise.allSettled(deletePromises);
-
+    const results = await Promise.all(deletePromises);
     return results;
   } catch (e) {
     console.error("Error deleting nodes:", e);
