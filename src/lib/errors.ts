@@ -2,7 +2,9 @@ export type ErrorName =
   | "LLM_ERROR"
   | "PARSING_ERROR"
   | "EXECUTION_ERROR"
-  | "DB_ERROR";
+  | "DB_ERROR"
+  | "SERVER_ERROR"
+  | "BAD_REQUEST";
 
 export class AideError extends Error {
   name: ErrorName;

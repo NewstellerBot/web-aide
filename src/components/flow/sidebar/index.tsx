@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 import Node from "./node";
+import KnowledgeBases from "./knowledgebases";
 import {
   Sidebar,
   SidebarContent,
@@ -24,7 +25,7 @@ const nodes = [
   { type: "APIOutput", label: "📬 API output" },
 ];
 
-const Menu = () => {
+const Nodes = () => {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>
@@ -71,8 +72,9 @@ export default async function AppSidebar() {
   return (
     <Sidebar variant="inset">
       <SidebarContent>
-        <Menu />
+        <Nodes />
         <WorkflowsDirectory />
+        <KnowledgeBases />
       </SidebarContent>
     </Sidebar>
   );
