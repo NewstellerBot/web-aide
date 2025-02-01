@@ -31,5 +31,6 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE items (
     id BIGSERIAL PRIMARY KEY,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    embedding VECTOR(1536)
+    knowledge_id VARCHAR(128),
+    embedding VECTOR(1536) CONSTRAINT fk_knowledge_items FOREIGN KEY(knowledge_id) REFERENCES knowledge(id) ON DELETE CASCADE
 );
