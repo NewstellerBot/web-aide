@@ -3,49 +3,27 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
-import { useShallow } from "zustand/react/shallow";
 
-import { type Document } from "@/components/knowledge/store";
 import { upload } from "@/app/actions/s3/upload";
-import {
-  useKnowledgeStore,
-  type KnowledgeState,
-} from "@/components/knowledge/store";
 
-const selector = (state: KnowledgeState) => ({
-  documents: state.documents,
-  addDocument: state.addDocument,
-});
-
-export default function FilesDrop() {
-  const { documents, addDocument } = useKnowledgeStore(useShallow(selector));
+export default function FilesDrop({ knowledgeId }: { knowledgeId: string }) {
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    acceptedFiles.forEach((file) => {
-      (async () => {
-        try {
-          const { url, key } = await upload(file);
-          const newDoc: Document = {
-            id: Math.random().toString(),
-            name: file.name,
-            uploadedAt: new Date(),
-            tokenCount: file.length,
-            s3Key: key,
-            s3Url: url,
-          };
-          toast.success("File uploaded successfully");
-          addDocument(newDoc);
-        } catch (e) {
-          toast.error("Error uploading file");
-          console.error(e);
-        }
-      })().catch((e) => console.error(e));
-    });
+    (async () => {
+      const uploadedFiles = Promise.all(
+        acceptedFiles.map((file) => upload(file, knowledgeId)),
+      );
+      await toast.promise(uploadedFiles, {
+        loading: "Uploading files...",
+        success: "Uploaded files!",
+        error: "Error while uploading files",
+      });
+    })().catch((e) => console.error(e));
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      "text/plain": [".txt"],
+      "text/plain": [".txt", ".md"],
       "application/pdf": [".pdf"],
       "application/msword": [".doc"],
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document":

@@ -1,8 +1,6 @@
-import React, { type ReactNode } from "react";
-import Link from "next/link";
+import React from "react";
 
 import { SidebarMenuButton } from "@/components/ui/sidebar";
-import { getAll } from "@/app/actions/db/knowledge/get";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -11,8 +9,10 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
-import NewKnowledgebase from "./new-knowledgebase";
-import ActivateKnowledge from "./activate-knowledge";
+import ActivateKnowledge from "@/components/flow/sidebar/activate-knowledge";
+import NewKnowledgebase from "@/components/flow/sidebar/new-knowledgebase";
+
+import { getAll } from "@/app/actions/db/knowledge/get";
 
 export function NavProjectsSkeleton() {
   return (
@@ -27,11 +27,10 @@ export function NavProjectsSkeleton() {
 }
 
 const KnowledgeBasesInternal = async () => {
-  const knowledgebases = await getAll();
-
+  const knowledgeBases = await getAll();
   return (
     <SidebarMenu>
-      {knowledgebases.map((k) => (
+      {knowledgeBases.map((k) => (
         <SidebarMenuItem key={k.id}>
           <SidebarMenuButton asChild>
             <ActivateKnowledge knowledge={k} />

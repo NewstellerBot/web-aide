@@ -4,7 +4,7 @@ import { z } from "zod";
 export const DocumentSchema = z.object({
   id: z.string(),
   name: z.string(),
-  uploadedAt: z.coerce.date(),
+  timestamp: z.coerce.date(),
   tokenCount: z.number(),
   s3Key: z.string().optional(),
   s3Url: z.string().optional(),

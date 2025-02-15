@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { env } from "@/env";
 import Anthropic from "@anthropic-ai/sdk";
 import { type Model } from "@/components/flow/nodes/prompt";
+import { AideError } from "./errors";
 
 export class LLM {
   private openai: OpenAI;
@@ -55,5 +56,88 @@ export class LLM {
             claude_response.usage.output_tokens,
         };
     }
+  }
+}
+
+export class Embeddings {
+  private openai: OpenAI;
+  private mock = false;
+  private readonly CHUNK_SIZE = 8000;
+  private readonly CHUNK_OVERLAP = 200; // Number of characters to overlap between chunks
+
+  constructor({ mock }: { mock?: boolean } = {}) {
+    if (!env.OPENAI_API_KEY) throw new Error("No openai api key provided");
+    this.openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
+    if (mock) this.mock = mock;
+  }
+  async generate(
+    prompt: string,
+  ): Promise<{ embedding: number[]; tokens: number }> {
+    if (this.mock)
+      return {
+        embedding: Array(1536)
+          .fill(0)
+          .map(() => Math.random()),
+        tokens: 0,
+      };
+    return this._generate(prompt);
+  }
+  private async _generate(prompt: string) {
+    const openai_response = await this.openai.embeddings.create({
+      model: "text-embedding-ada-002",
+      input: prompt,
+    });
+
+    const embedding = openai_response.data[0]?.embedding;
+    const tokens = openai_response.usage?.total_tokens;
+
+    if (!embedding)
+      throw new AideError({
+        name: "SERVER_ERROR",
+        message: "Could not get embeddings from OpenAI",
+      });
+
+    return {
+      embedding,
+      tokens,
+    };
+  }
+  public chunkText(
+    text: string,
+  ): { chunk: string; startIndex: number; endIndex: number }[] {
+    const words = text.split(" ");
+    const chunks: { chunk: string; startIndex: number; endIndex: number }[] =
+      [];
+    let currentChunk: string[] = [];
+    let currentLength = 0;
+    let currentStartIndex = 0;
+
+    for (const word of words) {
+      if (currentLength + word.length > this.CHUNK_SIZE) {
+        const chunk = currentChunk.join(" ");
+        chunks.push({
+          chunk,
+          startIndex: currentStartIndex,
+          endIndex: currentStartIndex + chunk.length,
+        });
+        currentStartIndex = currentStartIndex + chunk.length;
+        currentChunk = [word];
+        currentLength = word.length;
+      } else {
+        currentChunk.push(word);
+        currentLength += word.length + 1;
+      }
+    }
+
+    if (currentChunk.length > 0) {
+      const chunk = currentChunk.join(" ");
+      chunks.push({
+        chunk,
+        startIndex: currentStartIndex,
+        endIndex: currentStartIndex + chunk.length,
+      });
+    }
+
+    return chunks;
   }
 }

@@ -46,6 +46,7 @@ const useNodeStore = create<AideState>()(
     workflow: { name: "", id: "" },
     currentType: "prompt" as NodeType,
     isWorkflowLoading: false,
+    knowledgeBases: [],
     onNodesChange: (changes) =>
       set({ nodes: applyNodeChanges(changes, get().nodes) }),
     onEdgesChange: (changes) => {
@@ -89,14 +90,6 @@ const useNodeStore = create<AideState>()(
         viewport: v,
       }),
     setCurrentType: (t) => set({ currentType: t }),
-    setDbType: (nodeId, t) =>
-      set({
-        nodes: get().nodes.map((n) =>
-          n.id === nodeId && n.type === "db"
-            ? { ...n, data: { ...n.data, db: t } }
-            : n,
-        ),
-      }),
     setAPINodeName: (nodeId, name) =>
       set({
         nodes: get().nodes.map((n) => {
@@ -108,6 +101,7 @@ const useNodeStore = create<AideState>()(
         }),
       }),
     setIsWorkflowLoading: (isLoading) => set({ isWorkflowLoading: isLoading }),
+    setKnowledgeBases: (k) => set({ knowledgeBases: k }),
   })),
 );
 
@@ -121,6 +115,7 @@ const defaultStoreValues = () => ({
     zoom: 1,
   },
   isWorkflowLoading: false,
+  knowledgeBases: [],
 });
 
 export { useNodeStore, defaultStoreValues };

@@ -8,6 +8,7 @@ import type {
 } from "@xyflow/react";
 import { type Model } from "@/components/flow/nodes/prompt";
 import { type Workflow } from "@/app/actions/db/workflow/get";
+import { type Knowledge } from "@/app/actions/db/knowledge/get";
 
 export type NodeType = "prompt" | "db" | "APIInput" | "APIOutput";
 
@@ -18,6 +19,7 @@ export type AideState = {
   workflow: Workflow;
   viewport: Viewport;
   isWorkflowLoading: boolean;
+  knowledgeBases: Knowledge[];
   onNodesChange: OnNodesChange<Node>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
@@ -29,7 +31,7 @@ export type AideState = {
   createNode: (type: NodeType, position?: { x: number; y: number }) => void;
   setViewport: (v: Viewport) => void;
   setCurrentType: (t: NodeType) => void;
-  setDbType: (nodeId: string, t: "string") => void;
   setAPINodeName: (nodeId: string, name: string) => void;
   setIsWorkflowLoading: (isLoading: boolean) => void;
+  setKnowledgeBases: (knowledgeBases: Knowledge[]) => void;
 };

@@ -29,8 +29,20 @@ CREATE TABLE IF NOT EXISTS knowledge (
 );
 CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE items (
-    id BIGSERIAL PRIMARY KEY,
+    id VARCHAR(128) DEFAULT gen_random_uuid() PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    token_count BIGINT,
+    s3_key VARCHAR(256),
     knowledge_id VARCHAR(128),
-    embedding VECTOR(1536) CONSTRAINT fk_knowledge_items FOREIGN KEY(knowledge_id) REFERENCES knowledge(id) ON DELETE CASCADE
+    processing BOOLEAN DEFAULT TRUE,
+    CONSTRAINT fk_knowledge_items FOREIGN KEY(knowledge_id) REFERENCES knowledge(id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS embeddings (
+    id VARCHAR(128) DEFAULT gen_random_uuid() PRIMARY KEY,
+    item_id VARCHAR(128) NOT NULL,
+    embedding VECTOR(1536),
+    start_index INTEGER,
+    end_index INTEGER,
+    CONSTRAINT fk_item_embeddings FOREIGN KEY(item_id) REFERENCES items(id) ON DELETE CASCADE
 );

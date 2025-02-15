@@ -24,6 +24,7 @@ import { type AideState } from "./types";
 import { Spinner } from "../ui/spinner";
 import { updateNodeDiff, updateEdgeDiff } from "./utils";
 import { debounce } from "@/lib/utils";
+import { Knowledge } from "@/app/actions/db/knowledge/get";
 
 const nodeTypes: NodeTypes = {
   prompt: PromptNode,
@@ -45,6 +46,7 @@ const selector = (state: AideState) => ({
   setNodes: state.setNodes,
   setEdges: state.setEdges,
   setWorkflow: state.setWorkflow,
+  setKnowledgeBases: state.setKnowledgeBases,
 });
 
 export function FlowSkeleton() {
@@ -59,10 +61,12 @@ export default function Flow({
   initialNodes,
   initialEdges,
   workflowId,
+  knowledgeBases,
 }: {
   initialNodes: Node[];
   initialEdges: Edge[];
   workflowId: string;
+  knowledgeBases: Knowledge[];
 }) {
   const {
     viewport,
@@ -77,12 +81,14 @@ export default function Flow({
     setNodes,
     setEdges,
     setWorkflow,
+    setKnowledgeBases,
   } = useNodeStore(useShallow(selector));
 
   useEffect(() => {
     setNodes(initialNodes);
     setEdges(initialEdges);
     setWorkflow({ id: workflowId, name: "" });
+    setKnowledgeBases(knowledgeBases);
 
     const unsubNodes = useNodeStore.subscribe(
       (state) => ({ nodes: state.nodes, workflow: state.workflow }),

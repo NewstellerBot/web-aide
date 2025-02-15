@@ -4,7 +4,9 @@ export type ErrorName =
   | "EXECUTION_ERROR"
   | "DB_ERROR"
   | "SERVER_ERROR"
-  | "BAD_REQUEST";
+  | "BAD_REQUEST"
+  | "FILE_TYPE_ERROR"
+  | "NOT_FOUND";
 
 export class AideError extends Error {
   name: ErrorName;
@@ -24,5 +26,15 @@ export class AideError extends Error {
     this.message = message;
     this.name = name;
     this.cause = cause;
+  }
+}
+
+export class FileTypeError extends AideError {
+  constructor(message: string, cause?: unknown) {
+    super({
+      name: "FILE_TYPE_ERROR",
+      message,
+      cause,
+    });
   }
 }
