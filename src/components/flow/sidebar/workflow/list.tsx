@@ -4,13 +4,13 @@ import {
   SidebarMenu,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
-import ActivateWorkflow from "./activate-workflow";
+import ActivateWorkflow from "./activate";
 import {
   ContextMenu,
   ContextMenuTrigger,
   ContextMenuContent,
 } from "@/components/ui/context-menu";
-import ContextContent from "./context-content";
+import ContextContent from "./context";
 
 export default async function Workflows() {
   const workflows = await getAll();

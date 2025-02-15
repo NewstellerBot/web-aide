@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 import Node from "./node";
-import KnowledgeBases from "./knowledgebases";
+import KnowledgeBases from "./knowledge/list";
 import {
   Sidebar,
   SidebarContent,
@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/sidebar";
 
 import { type NodeType } from "../types";
-import Workflows, { NavProjectsSkeleton } from "./workflows";
-import NewWorkflow from "./new-worfklow";
+import Workflows, { NavProjectsSkeleton } from "./workflow/list";
+import NewWorkflow from "./workflow/new";
 
 const nodes = [
   { type: "prompt", label: "💬 LLM model" },

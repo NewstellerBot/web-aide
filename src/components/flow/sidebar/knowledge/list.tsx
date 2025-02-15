@@ -9,8 +9,8 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
-import ActivateKnowledge from "@/components/flow/sidebar/activate-knowledge";
-import NewKnowledgebase from "@/components/flow/sidebar/new-knowledgebase";
+import ActivateKnowledge from "@/components/flow/sidebar/knowledge/activate";
+import NewKnowledgebase from "@/components/flow/sidebar/knowledge/new";
 
 import { getAll } from "@/app/actions/db/knowledge/get";
 
