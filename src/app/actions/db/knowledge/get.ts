@@ -152,3 +152,12 @@ export async function getWithItems(id: string) {
 
   return knowledgeBaseWithItemsSchema.parse(knowledge);
 }
+
+export async function exists(id: string) {
+  if (!process.env.POSTGRES_URL) throw new Error("No postgres URL provided!");
+  const sql = neon(process.env.POSTGRES_URL);
+  const [res] = await sql`
+    SELECT * FROM knowledge WHERE id=${id} LIMIT 1; 
+  `;
+  return !!res;
+}

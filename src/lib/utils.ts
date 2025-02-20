@@ -11,7 +11,7 @@ export function preventDefault(e: SyntheticEvent) {
 }
 
 export function debounce(waitFor: number, fn: CallableFunction) {
-  let timeout: NodeJS.Timeout;
+  let timeout: ReturnType<typeof setTimeout>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function (...innerArgs: any[]) {
@@ -20,4 +20,10 @@ export function debounce(waitFor: number, fn: CallableFunction) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
     timeout = setTimeout(() => fn(...innerArgs), waitFor);
   };
+}
+
+export function formatVecToDb(vec: number[]): string {
+  const vectorString = `[${vec.join(",")}]`;
+  // return `${vectorString}::vector`;
+  return vectorString;
 }

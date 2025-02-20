@@ -93,15 +93,26 @@ const useNodeStore = create<AideState>()(
     setAPINodeName: (nodeId, name) =>
       set({
         nodes: get().nodes.map((n) => {
-          console.log(nodeId, n.id, n.type);
           return n.id === nodeId &&
             (n.type === "APIInput" || n.type === "APIOutput")
             ? { ...n, data: { ...n.data, name } }
             : n;
         }),
       }),
+    setDb: (nodeId, data) =>
+      set({
+        nodes: get().nodes.map((n) => {
+          console.log(n, data);
+          return n.id === nodeId && n.type === "db"
+            ? { ...n, data: { ...n.data, ...data } }
+            : n;
+        }),
+      }),
     setIsWorkflowLoading: (isLoading) => set({ isWorkflowLoading: isLoading }),
     setKnowledgeBases: (k) => set({ knowledgeBases: k }),
+    debugLog: () => {
+      console.log(get().nodes.map((n) => (n.type === "db" ? n.data : null)));
+    },
   })),
 );
 

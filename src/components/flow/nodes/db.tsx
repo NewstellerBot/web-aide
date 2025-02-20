@@ -1,6 +1,7 @@
 "use client";
 
 import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
+import { useShallow } from "zustand/react/shallow";
 
 import { cn } from "@/lib/utils";
 
@@ -12,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { v4 } from "uuid";
+import { z } from "zod";
 import { useNodeStore } from "../store";
 import {
   Tooltip,
@@ -19,11 +21,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { InfoIcon } from "lucide-react";
+import { type AideState } from "../types";
 
-export type DbNode = Node<{
-  id: string;
-  name: string;
-}>;
+export const DataSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+type Data = z.infer<typeof DataSchema>;
+export type DbNode = Node<Data>;
 
 export const defaultDbNode = () => ({
   id: v4(),
@@ -35,8 +41,19 @@ export const defaultDbNode = () => ({
   type: "db",
 });
 
-function DbNodeClient({ isConnectable, selected, data }: NodeProps<DbNode>) {
-  const knowledgeBases = useNodeStore((state) => state.knowledgeBases);
+const selector = (state: AideState) => ({
+  knowledgeBases: state.knowledgeBases,
+  setDb: state.setDb,
+  log: state.debugLog,
+});
+
+function DbNodeClient({
+  isConnectable,
+  selected,
+  data,
+  id,
+}: NodeProps<DbNode>) {
+  const { knowledgeBases, setDb, log } = useNodeStore(useShallow(selector));
   return (
     <div
       className={cn(
@@ -63,7 +80,10 @@ function DbNodeClient({ isConnectable, selected, data }: NodeProps<DbNode>) {
         <div className="mb-2 mt-2">
           <Select
             defaultValue={data.id}
-            onValueChange={(id) => console.log(id)}
+            onValueChange={(dbId) => {
+              const { name } = knowledgeBases.find((kb) => kb.id === dbId)!;
+              setDb(id, { id: dbId, name });
+            }}
           >
             <SelectTrigger className="w-full px-2 py-1 text-xs focus:border-slate-400 focus:ring-0">
               <SelectValue placeholder="Choose Knowledge Base..." />

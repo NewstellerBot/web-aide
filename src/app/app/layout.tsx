@@ -19,13 +19,11 @@ export default async function Layout({
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <SidebarInset>
-        <main>
-          <div className="flex items-center justify-between p-0.5">
-            <SidebarTrigger />
-            <FlowLink />
-          </div>
-          {children}
-        </main>
+        <div className="flex items-center justify-between p-0.5">
+          <SidebarTrigger />
+          <FlowLink />
+        </div>
+        {children}
       </SidebarInset>
     </SidebarProvider>
   );

@@ -56,49 +56,43 @@ const GetEdgesResponseSchema = z.array(EdgeSchema);
 export async function get({ id }: { id: string }) {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres URL provided!");
 
-  try {
-    const sql = neon(process.env.POSTGRES_URL);
-    const workflow = await sql`SELECT * FROM workflows WHERE id = ${id};`;
-    if (!workflow || workflow.length === 0 || !workflow[0]?.id)
-      throw new AideError({ name: "DB_ERROR", message: "Workflow not found." });
+  const sql = neon(process.env.POSTGRES_URL);
+  const workflow = await sql`SELECT * FROM workflows WHERE id = ${id};`;
+  if (!workflow || workflow.length === 0 || !workflow[0]?.id)
+    throw new AideError({
+      name: "NOT_FOUND",
+      message: "Workflow not found.",
+    });
 
-    const nodesPromise = sql`SELECT n.data AS node_data
+  const nodesPromise = sql`SELECT n.data AS node_data
       FROM workflows w
       LEFT JOIN nodes n ON w.id = n.workflow_id
       WHERE w.id = ${id};`;
 
-    const edgesPromise = sql`SELECT e.id AS edge_id, e.source, e.target
+  const edgesPromise = sql`SELECT e.id AS edge_id, e.source, e.target
                           FROM workflows w
                           LEFT JOIN edges e ON w.id = e.workflow_id
                           WHERE w.id = ${id};`;
 
-    const [nodes, edges] = await Promise.all([nodesPromise, edgesPromise]);
+  const [nodes, edges] = await Promise.all([nodesPromise, edgesPromise]);
 
-    const formattedNodes = nodes.flatMap((n) => {
-      if (n.node_data === null) return [];
-      return n.node_data as Node;
-    });
+  const formattedNodes = nodes.flatMap((n) => {
+    if (n.node_data === null) return [];
+    return n.node_data as Node;
+  });
 
-    const formattedEdges = edges.flatMap((e) => {
-      const { edge_id, source, target } = e;
-      if (!edge_id || !source || !target) return [];
-      return {
-        id: edge_id as Edge["id"],
-        source: source as Edge["source"],
-        target: target as Edge["target"],
-      } as Edge;
-    });
-
+  const formattedEdges = edges.flatMap((e) => {
+    const { edge_id, source, target } = e;
+    if (!edge_id || !source || !target) return [];
     return {
-      nodes: GetNodesResponseSchema.parse(formattedNodes),
-      edges: GetEdgesResponseSchema.parse(formattedEdges),
-    };
-  } catch (e) {
-    console.error(e);
-    throw new AideError({
-      name: "DB_ERROR",
-      message: "Failed to retrieve workflow from db.",
-      cause: e,
-    });
-  }
+      id: edge_id as Edge["id"],
+      source: source as Edge["source"],
+      target: target as Edge["target"],
+    } as Edge;
+  });
+
+  return {
+    nodes: GetNodesResponseSchema.parse(formattedNodes),
+    edges: GetEdgesResponseSchema.parse(formattedEdges),
+  };
 }

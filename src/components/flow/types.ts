@@ -27,6 +27,7 @@ export type AideState = {
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
   setPrompt: (nodeId: string, prompt: string) => void;
+  setDb: (nodeId: string, data: { name: string; id: string }) => void;
   setWorkflow: (w: Workflow) => void;
   createNode: (type: NodeType, position?: { x: number; y: number }) => void;
   setViewport: (v: Viewport) => void;
@@ -34,4 +35,5 @@ export type AideState = {
   setAPINodeName: (nodeId: string, name: string) => void;
   setIsWorkflowLoading: (isLoading: boolean) => void;
   setKnowledgeBases: (knowledgeBases: Knowledge[]) => void;
+  debugLog: () => void;
 };

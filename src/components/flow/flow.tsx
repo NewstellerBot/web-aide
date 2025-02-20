@@ -12,7 +12,7 @@ export default async function Flow({ id }: { id: string }) {
         </div>
       }
     >
-      <Wrapper id={id} />;
+      <Wrapper id={id} />
     </Suspense>
   );
 }

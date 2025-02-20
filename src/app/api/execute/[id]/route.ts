@@ -14,7 +14,7 @@ export async function POST(
     const response = await executeGraph({ nodes, edges, context });
     return Response.json(response);
   } catch (e) {
-    // console.error(e);
+    console.error(e);
     if (e instanceof AideError) {
       switch (e.name) {
         case "DB_ERROR":
@@ -24,10 +24,10 @@ export async function POST(
         case "LLM_ERROR":
           return Response.json({ message: e.message }, { status: 500 });
         case "PARSING_ERROR":
-          return new Response("error");
+          return Response.json({ message: "Unknown error" }, { status: 500 });
       }
     }
-    return new Response("Unknown error");
+    return Response.json({ message: "Unknown error" }, { status: 500 });
   }
 }
 

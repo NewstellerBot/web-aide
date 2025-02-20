@@ -1,20 +1,23 @@
 "use server";
 
 import mammoth from "mammoth";
-// import PdfParse from "pdf-parse";
 import pdf from "pdf-parse";
 import { FileTypeError } from "@/lib/errors";
 
-export async function fileToText(file: File): Promise<string> {
-  const buffer = Buffer.from(await file.arrayBuffer());
+type FileInput = Buffer | { arrayBuffer(): Promise<ArrayBuffer>; type: string };
 
-  switch (file.type) {
+export async function fileToText(input: FileInput, contentType?: string): Promise<string> {
+  const buffer = 'arrayBuffer' in input 
+    ? Buffer.from(await input.arrayBuffer())
+    : input;
+
+  const type = 'type' in input ? input.type : contentType;
+
+  switch (type) {
     case "application/pdf":
       try {
         const pdfData = await pdf(buffer);
-        // const pdfData = await PdfParse(buffer);
         return pdfData.text;
-        return "mock pdf";
       } catch (error) {
         throw new FileTypeError(
           `Failed to parse PDF file${error instanceof Error ? `: ${error.message}` : ""}`,
@@ -35,6 +38,7 @@ export async function fileToText(file: File): Promise<string> {
 
     case "text/plain":
     case "application/octet-stream":
+    default:
       try {
         return buffer.toString("utf-8");
       } catch (error) {
@@ -43,10 +47,5 @@ export async function fileToText(file: File): Promise<string> {
           error,
         );
       }
-
-    default:
-      throw new FileTypeError(
-        `Unsupported file type: ${file.type}. Supported types are: PDF, DOCX, and plain text.`,
-      );
   }
 }
