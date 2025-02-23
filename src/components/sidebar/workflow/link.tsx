@@ -1,6 +1,6 @@
 "use client";
 
-import { useNodeStore } from "@/components/flow/store";
+import { useNodeStore } from "@/components/sidebar/store";
 import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import toast from "react-hot-toast";

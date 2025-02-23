@@ -14,7 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import { type NodeType } from "../types";
+import { type NodeType } from "@/components/sidebar/types";
 import Workflows, { NavProjectsSkeleton } from "./workflow/list";
 import NewWorkflow from "./workflow/new";
 

@@ -14,14 +14,14 @@ import {
 } from "@/components/ui/select";
 import { v4 } from "uuid";
 import { z } from "zod";
-import { useNodeStore } from "../store";
+import { useNodeStore } from "../../sidebar/store";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { InfoIcon } from "lucide-react";
-import { type AideState } from "../types";
+import { type AideState } from "../../sidebar/types";
 
 export const DataSchema = z.object({
   id: z.string(),
