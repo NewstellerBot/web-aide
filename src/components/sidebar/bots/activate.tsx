@@ -5,30 +5,26 @@ import DOMPurify from "isomorphic-dompurify";
 
 import { cn } from "@/lib/utils";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
-import { upsert } from "@/app/actions/db/knowledge/upsert";
 
 import Link from "next/link";
-import { type Knowledge } from "@/app/actions/db/knowledge/get";
+import { type Bot } from "@/app/actions/db/bot/schema";
 import { usePathname } from "next/navigation";
+import { upsert } from "@/app/actions/db/bot/upsert";
 
-export default function ActivateWorkflow({
-  knowledge,
-}: {
-  knowledge: Knowledge;
-}) {
+export default function ActivateBot({ bot }: { bot: Bot }) {
   const [isContentEditable, setIsContentEditable] = useState(false);
-  const [name, setName] = useState(knowledge.name);
+  const [name, setName] = useState(bot.name);
   const pathname = usePathname();
 
   return (
     <>
-      <Link href={`/app/knowledge/${knowledge.id}`}>
+      <Link href={`/app/bot/${bot.id}`}>
         <SidebarMenuButton
           className={cn(
             "hover:cursor-pointer",
             isContentEditable && "hover:cursor-text",
           )}
-          variant={pathname.includes(knowledge.id) ? "outline" : "default"}
+          variant={pathname.includes(bot.id) ? "outline" : "default"}
           asChild
         >
           <span
@@ -46,7 +42,7 @@ export default function ActivateWorkflow({
               setIsContentEditable(false);
               const newName = DOMPurify.sanitize(e.currentTarget.innerText);
               setName(newName);
-              await upsert({ ...knowledge, name: newName });
+              await upsert({ ...bot, name: newName });
             }}
             dangerouslySetInnerHTML={{ __html: name }}
           />

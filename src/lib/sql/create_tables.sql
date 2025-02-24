@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS knowledge (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE EXTENSION IF NOT EXISTS vector;
-CREATE TABLE items (
+CREATE TABLE IF NOT EXISTS items (
     id VARCHAR(128) DEFAULT gen_random_uuid() PRIMARY KEY,
     name VARCHAR(256) NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -45,4 +45,12 @@ CREATE TABLE IF NOT EXISTS embeddings (
     start_index INTEGER,
     end_index INTEGER,
     CONSTRAINT fk_item_embeddings FOREIGN KEY(item_id) REFERENCES items(id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS bots (
+    id VARCHAR(128) DEFAULT gen_random_uuid() PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    user_id VARCHAR(128),
+    access_token VARCHAR(64),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 );
