@@ -12,6 +12,7 @@ import { defaultPromptNode } from "@/components/flow/nodes/prompt";
 import { defaultDbNode } from "@/components/flow/nodes/db";
 import { defaultInputNode } from "@/components/flow/nodes/input";
 import { defaultOutputNode } from "@/components/flow/nodes/output";
+import { defaultBotInputNode } from "@/components/flow/nodes/bot";
 
 import type { AideState, NodeType } from "./types";
 
@@ -28,6 +29,8 @@ const defaultNode = (type: NodeType): Node => {
       return defaultInputNode();
     case "APIOutput":
       return defaultOutputNode();
+    case "botInput":
+      return defaultBotInputNode();
     default:
       // figure out what to do in this case; technically should never occur
       throw new Error("Unknown type specified");
@@ -47,6 +50,7 @@ const useNodeStore = create<AideState>()(
     currentType: "prompt" as NodeType,
     isWorkflowLoading: false,
     knowledgeBases: [],
+    bots: [],
     onNodesChange: (changes) =>
       set({ nodes: applyNodeChanges(changes, get().nodes) }),
     onEdgesChange: (changes) => {
@@ -99,6 +103,7 @@ const useNodeStore = create<AideState>()(
             : n;
         }),
       }),
+    setBots: (bots) => set({ bots }),
     setDb: (nodeId, data) =>
       set({
         nodes: get().nodes.map((n) => {
