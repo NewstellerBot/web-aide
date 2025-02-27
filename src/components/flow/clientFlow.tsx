@@ -95,7 +95,7 @@ export default function Flow({
     setEdges(initialEdges);
     setWorkflow({ id: workflowId, name: "" });
     setKnowledgeBases(knowledgeBases);
-    setBots(bots);
+    setBots(initialBots);
 
     const unsubNodes = useNodeStore.subscribe(
       (state) => ({ nodes: state.nodes, workflow: state.workflow }),
