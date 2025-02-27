@@ -1,17 +1,17 @@
 import { get as getWorkflow } from "@/app/actions/db/workflow/get";
-import { getAll } from "@/app/actions/db/knowledge/get";
+import { getAll as getAllBots } from "@/app/actions/db/bot/get";
+import { getAll as getAllKnowledgebases } from "@/app/actions/db/knowledge/get";
 import Flow from "@/components/flow/clientFlow";
 import { AideError } from "@/lib/errors";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
-import toast from "react-hot-toast";
-import { redirect } from "next/navigation";
 
 export default async function Wrapper({ id }: { id: string }) {
   try {
-    const [{ nodes, edges }, knowledgeBases] = await Promise.all([
+    const [{ nodes, edges }, bots, knowledgeBases] = await Promise.all([
       getWorkflow({ id }),
-      getAll(),
+      getAllBots(),
+      getAllKnowledgebases(),
     ]);
 
     return (
@@ -19,6 +19,7 @@ export default async function Wrapper({ id }: { id: string }) {
         initialNodes={nodes}
         initialEdges={edges}
         workflowId={id}
+        bots={bots}
         knowledgeBases={knowledgeBases}
       />
     );
