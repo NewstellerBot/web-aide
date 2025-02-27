@@ -65,13 +65,13 @@ export default function Flow({
   initialEdges,
   workflowId,
   knowledgeBases,
-  bots,
+  initialBots,
 }: {
   initialNodes: Node[];
   initialEdges: Edge[];
   workflowId: string;
   knowledgeBases: Knowledge[];
-  bots: { name: string; id: string }[];
+  initialBots: { name: string; id: string }[];
 }) {
   const {
     viewport,

@@ -19,7 +19,7 @@ export default async function Wrapper({ id }: { id: string }) {
         initialNodes={nodes}
         initialEdges={edges}
         workflowId={id}
-        bots={bots}
+        initialBots={bots}
         knowledgeBases={knowledgeBases}
       />
     );
