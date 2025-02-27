@@ -21,6 +21,7 @@ const nodes = [
   { type: "db", label: "💿 Knowledgebase" },
   { type: "APIInput", label: "🔌 API input" },
   { type: "APIOutput", label: "📬 API output" },
+  { type: "botInput", label: "🤖 Bot Input" },
 ];
 
 const Nodes = () => {
