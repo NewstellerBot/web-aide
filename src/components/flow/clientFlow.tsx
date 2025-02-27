@@ -25,7 +25,7 @@ import { Spinner } from "../ui/spinner";
 import { updateNodeDiff, updateEdgeDiff } from "./utils";
 import { debounce } from "@/lib/utils";
 import { type Knowledge } from "@/app/actions/db/knowledge/get";
-import BotInput from "./nodes/bot";
+import BotInput from "./nodes/botInput";
 
 const nodeTypes: NodeTypes = {
   prompt: PromptNode,
