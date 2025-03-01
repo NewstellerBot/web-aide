@@ -11,7 +11,13 @@ import { type Workflow } from "@/app/actions/db/workflow/get";
 import { type Knowledge } from "@/app/actions/db/knowledge/get";
 import { type GetAllResponse as Bot } from "@/app/actions/db/bot/get";
 
-export type NodeType = "prompt" | "db" | "APIInput" | "APIOutput" | "botInput";
+export type NodeType =
+  | "prompt"
+  | "db"
+  | "APIInput"
+  | "APIOutput"
+  | "botInput"
+  | "botOutput";
 
 export type AideState = {
   nodes: Node[];

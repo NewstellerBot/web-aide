@@ -5,6 +5,9 @@ import { currentUser } from "@clerk/nextjs/server";
 import { AideError } from "@/lib/errors";
 import fetch from "node-fetch";
 import { z } from "zod";
+import { env } from "@/env";
+import crypto from "crypto";
+import { signJWT } from "@/lib/jwt";
 
 const botSchema = z
   .object({
@@ -71,9 +74,16 @@ export async function setWebhook({
     WHERE id = ${botId} AND user_id = ${user.id}
   `;
 
-  console.log(accessToken);
+  const webhookUrl = `https://${env.NEXT_PUBLIC_BASE_URL}/api/telegram/webhook`;
 
-  const webhookUrl = "https://myurl.com/api/v1/somesomesome";
+  const payload = {
+    botId,
+    workflowId,
+  };
+
+  const jwt = signJWT(payload);
+  console.log({ jwt });
+
   // Send request to Telegram API
   const res = await fetch(
     `https://api.telegram.org/bot${accessToken}/setWebhook`,
@@ -82,11 +92,14 @@ export async function setWebhook({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         url: webhookUrl,
+        allowed_updates: ["message"],
+        // secret_token: ``
       }),
     },
   );
 
   if (!res.ok) {
+    console.error(res.body);
     throw new AideError({
       name: "EXECUTION_ERROR",
       message: "Telegram API error",

@@ -27,13 +27,19 @@ import { debounce } from "@/lib/utils";
 import { type Knowledge } from "@/app/actions/db/knowledge/get";
 import BotInput from "./nodes/botInput";
 import { type GetAllResponse as Bot } from "@/app/actions/db/bot/get";
+import BotOutput from "./nodes/botOutput";
 
 const nodeTypes: NodeTypes = {
+  // functional
   prompt: PromptNode,
   db: DbNode,
+  // io
+  // api
   APIInput: InputNode,
   APIOutput: OutputNode,
+  // bot
   botInput: BotInput,
+  botOutput: BotOutput,
 };
 
 const selector = (state: AideState) => ({

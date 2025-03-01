@@ -13,6 +13,7 @@ import { defaultDbNode } from "@/components/flow/nodes/db";
 import { defaultInputNode } from "@/components/flow/nodes/input";
 import { defaultOutputNode } from "@/components/flow/nodes/output";
 import { defaultBotInputNode } from "@/components/flow/nodes/botInput";
+import { defaultBotOutputNode } from "@/components/flow/nodes/botOutput";
 
 import type { AideState, NodeType } from "./types";
 
@@ -31,6 +32,8 @@ const defaultNode = (type: NodeType): Node => {
       return defaultOutputNode();
     case "botInput":
       return defaultBotInputNode();
+    case "botOutput":
+      return defaultBotOutputNode();
     default:
       // figure out what to do in this case; technically should never occur
       throw new Error("Unknown type specified");

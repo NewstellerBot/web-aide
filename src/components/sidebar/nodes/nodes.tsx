@@ -22,6 +22,7 @@ const nodes = [
   { type: "APIInput", label: "🔌 API input" },
   { type: "APIOutput", label: "📬 API output" },
   { type: "botInput", label: "🤖 Bot Input" },
+  { type: "botOutput", label: "🦾 Bot Output" },
 ];
 
 const Nodes = () => {
