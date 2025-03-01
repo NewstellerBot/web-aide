@@ -7,7 +7,7 @@ import { neon } from "@neondatabase/serverless";
 import { env } from "@/env";
 import { BotSchema } from "@/app/actions/db/bot/schema";
 import { get } from "@/app/actions/db/workflow/get";
-import { adjustBotNodes } from "./util";
+import { adjustBotNodes, chunkMessage } from "./util";
 import { executeGraph } from "@/app/actions/llm/execute";
 import TelegramBot from "node-telegram-bot-api";
 
@@ -69,7 +69,11 @@ export const POST = apiWrapper(async (req: Request) => {
     outputs.flatMap((outputId) => {
       const msg = result[outputId];
       if (!msg) return [];
-      return tgBot.sendMessage(chatId, msg, { parse_mode: "Markdown" });
+
+      const chunks = chunkMessage(msg);
+      return chunks.map((chunk) =>
+        tgBot.sendMessage(chatId, chunk, { parse_mode: "Markdown" }),
+      );
     }),
   );
 
