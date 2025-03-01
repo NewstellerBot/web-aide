@@ -73,7 +73,7 @@ export async function setWebhook({
     WHERE id = ${botId} AND user_id = ${user.id}
   `;
 
-  const webhookUrl = `https://${env.WEBHOOK_BASE_URL}/api/telegram/webhook`;
+  const webhookUrl = `https://aide-three.vercel.app/api/telegram/webhook`;
 
   const payload = {
     botId,
