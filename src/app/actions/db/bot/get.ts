@@ -31,7 +31,7 @@ export async function get(id: string): Promise<Omit<Bot, "access_token">> {
     });
   }
 
-  return BotSchema.parse(res);
+  return BotSchema.omit({ access_token: true }).parse(res);
 }
 
 const getAllResponseSchema = z
