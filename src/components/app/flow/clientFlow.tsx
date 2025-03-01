@@ -13,15 +13,18 @@ import {
 import { useShallow } from "zustand/react/shallow";
 import { type DragEvent, useEffect } from "react";
 
-import { useNodeStore, defaultStoreValues } from "@/components/sidebar/store";
+import {
+  useNodeStore,
+  defaultStoreValues,
+} from "@/components/app/sidebar/store";
 import { preventDefault } from "@/lib/utils";
 
-import PromptNode from "@/components/flow/nodes/prompt";
-import DbNode from "@/components/flow/nodes/db";
-import InputNode from "@/components/flow/nodes/input";
-import OutputNode from "@/components/flow/nodes/output";
-import { type AideState } from "../sidebar/types";
-import { Spinner } from "../ui/spinner";
+import PromptNode from "@/components/app/flow/nodes/prompt";
+import DbNode from "@/components/app/flow/nodes/db";
+import InputNode from "@/components/app/flow/nodes/input";
+import OutputNode from "@/components/app/flow/nodes/output";
+import { type AideState } from "@/components/app/sidebar/types";
+import { Spinner } from "../../ui/spinner";
 import { updateNodeDiff, updateEdgeDiff } from "./utils";
 import { debounce } from "@/lib/utils";
 import { type Knowledge } from "@/app/actions/db/knowledge/get";

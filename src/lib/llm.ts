@@ -2,7 +2,7 @@ import OpenAI from "openai";
 
 import { env } from "@/env";
 import Anthropic from "@anthropic-ai/sdk";
-import { type Model } from "@/components/flow/nodes/prompt";
+import { type Model } from "@/components/app/flow/nodes/prompt";
 import { AideError } from "./errors";
 
 export class LLM {

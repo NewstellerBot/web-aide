@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
-import Node from "@/components/sidebar/nodes/node";
+import Node from "@/components/app/sidebar/nodes/node";
 import type { NodeType } from "../types";
 
 const nodes = [

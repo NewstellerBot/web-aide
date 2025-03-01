@@ -1,4 +1,4 @@
-import Flow from "@/components/flow/flow";
+import Flow from "@/components/app/flow/flow";
 
 export default async function Page({
   params,

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import Wrapper from "@/components/flow/asyncWrapper";
+import Wrapper from "@/components/app/flow/asyncWrapper";
 import { Spinner } from "@/components/ui/spinner";
 
 export default async function Flow({ id }: { id: string }) {

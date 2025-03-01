@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
 import { get } from "@/app/actions/db/bot/get";
-import BotDetails from "@/components/bots/bot-details";
+import BotDetails from "@/components/app/bots/bot-details";
 import { Spinner } from "@/components/ui/spinner";
 
 const Bot = async ({ id }: { id: string }) => {

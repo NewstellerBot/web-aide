@@ -9,11 +9,10 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
-import ActivateKnowledge from "@/components/sidebar/knowledge/activate";
-import NewBot from "@/components/sidebar/bots/new";
+import ActivateKnowledge from "@/components/app/sidebar/knowledge/activate";
+import NewKnowledgebase from "@/components/app/sidebar/knowledge/new";
 
-import { getAll } from "@/app/actions/db/bot/get";
-import ActivateBot from "./activate";
+import { getAll } from "@/app/actions/db/knowledge/get";
 
 export function NavProjectsSkeleton() {
   return (
@@ -27,14 +26,14 @@ export function NavProjectsSkeleton() {
   );
 }
 
-const BotsInternal = async () => {
-  const bots = await getAll();
+const KnowledgeBasesInternal = async () => {
+  const knowledgeBases = await getAll();
   return (
     <SidebarMenu>
-      {bots.map((b) => (
-        <SidebarMenuItem key={b.id}>
+      {knowledgeBases.map((k) => (
+        <SidebarMenuItem key={k.id}>
           <SidebarMenuButton asChild>
-            <ActivateBot bot={b} />
+            <ActivateKnowledge knowledge={k} />
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
@@ -42,17 +41,17 @@ const BotsInternal = async () => {
   );
 };
 
-const Bots = () => {
+const KnowledgeBases = () => {
   return (
     <>
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarGroupLabel>
-            <span>Bots</span>
-            <NewBot />
+            <span>Knowledge</span>
+            <NewKnowledgebase />
           </SidebarGroupLabel>
           <React.Suspense fallback={<NavProjectsSkeleton />}>
-            <BotsInternal />
+            <KnowledgeBasesInternal />
           </React.Suspense>
         </SidebarGroupContent>
       </SidebarGroup>
@@ -60,4 +59,4 @@ const Bots = () => {
   );
 };
 
-export default Bots;
+export default KnowledgeBases;

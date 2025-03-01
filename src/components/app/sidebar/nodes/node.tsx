@@ -1,8 +1,8 @@
 "use client";
 import { type ReactNode } from "react";
 
-import { useNodeStore } from "@/components/sidebar/store";
-import { type NodeType } from "@/components/sidebar/types";
+import { useNodeStore } from "@/components/app/sidebar/store";
+import { type NodeType } from "@/components/app/sidebar/types";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 
 export default function Node({

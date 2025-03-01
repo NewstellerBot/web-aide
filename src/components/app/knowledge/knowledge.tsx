@@ -1,6 +1,6 @@
-import FilesDrop from "@/components/knowledge/upload";
-import FilesTable from "@/components/knowledge/table";
-import Preview from "@/components/knowledge/preview";
+import FilesDrop from "@/components/app/knowledge/upload";
+import FilesTable from "@/components/app/knowledge/table";
+import Preview from "@/components/app/knowledge/preview";
 import { getWithItems } from "@/app/actions/db/knowledge/get";
 
 export default async function Knowledge({ id }: { id: string }) {

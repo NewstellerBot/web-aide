@@ -9,7 +9,7 @@ import Image from "next/image";
 import { v4 } from "uuid";
 
 import { cn } from "@/lib/utils";
-import { useNodeStore } from "@/components/sidebar/store";
+import { useNodeStore } from "@/components/app/sidebar/store";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Select,

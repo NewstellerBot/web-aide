@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import Knowledge from "@/components/knowledge/knowledge";
+import Knowledge from "@/components/app/knowledge/knowledge";
 import { Spinner } from "@/components/ui/spinner"; // Assuming you have a spinner component
 
 export default async function Page({

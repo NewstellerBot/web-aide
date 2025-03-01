@@ -6,7 +6,7 @@ import type {
   Viewport,
   Node,
 } from "@xyflow/react";
-import { type Model } from "@/components/flow/nodes/prompt";
+import { type Model } from "@/components/app/flow/nodes/prompt";
 import { type Workflow } from "@/app/actions/db/workflow/get";
 import { type Knowledge } from "@/app/actions/db/knowledge/get";
 import { type GetAllResponse as Bot } from "@/app/actions/db/bot/get";

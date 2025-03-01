@@ -8,12 +8,12 @@ import {
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
-import { defaultPromptNode } from "@/components/flow/nodes/prompt";
-import { defaultDbNode } from "@/components/flow/nodes/db";
-import { defaultInputNode } from "@/components/flow/nodes/input";
-import { defaultOutputNode } from "@/components/flow/nodes/output";
-import { defaultBotInputNode } from "@/components/flow/nodes/botInput";
-import { defaultBotOutputNode } from "@/components/flow/nodes/botOutput";
+import { defaultPromptNode } from "@/components/app/flow/nodes/prompt";
+import { defaultDbNode } from "@/components/app/flow/nodes/db";
+import { defaultInputNode } from "@/components/app/flow/nodes/input";
+import { defaultOutputNode } from "@/components/app/flow/nodes/output";
+import { defaultBotInputNode } from "@/components/app/flow/nodes/botInput";
+import { defaultBotOutputNode } from "@/components/app/flow/nodes/botOutput";
 
 import type { AideState, NodeType } from "./types";
 

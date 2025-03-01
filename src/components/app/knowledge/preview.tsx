@@ -11,7 +11,7 @@ import {
 import {
   useKnowledgeStore,
   type KnowledgeState,
-} from "@/components/knowledge/store";
+} from "@/components/app/knowledge/store";
 
 const selector = (state: KnowledgeState) => ({
   documents: state.documents,

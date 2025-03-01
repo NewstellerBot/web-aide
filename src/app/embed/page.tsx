@@ -1,4 +1,4 @@
-import EmbedForm from "@/components/embed/embed-form";
+import EmbedForm from "@/components/app/embed/embed-form";
 
 export default function EmbedPage() {
   return (

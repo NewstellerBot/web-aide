@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import { v4 } from "uuid";
 import { set, z } from "zod";
-import { useNodeStore } from "../../sidebar/store";
+import { useNodeStore } from "@/components/app/sidebar/store";
 import {
   Tooltip,
   TooltipContent,
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/tooltip";
 import { InfoIcon } from "lucide-react";
 import Image from "next/image";
-import { type AideState } from "../../sidebar/types";
+import { type AideState } from "@/components/app/sidebar/types";
 import { setWebhook } from "@/app/actions/db/bot/webhook";
 import {
   Dialog,

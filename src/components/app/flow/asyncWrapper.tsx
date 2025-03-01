@@ -1,10 +1,10 @@
 import { get as getWorkflow } from "@/app/actions/db/workflow/get";
 import { getAll as getAllBots } from "@/app/actions/db/bot/get";
 import { getAll as getAllKnowledgebases } from "@/app/actions/db/knowledge/get";
-import Flow from "@/components/flow/clientFlow";
+import Flow from "@/components/app/flow/clientFlow";
 import { AideError } from "@/lib/errors";
 import Image from "next/image";
-import { Separator } from "../ui/separator";
+import { Separator } from "../../ui/separator";
 
 export default async function Wrapper({ id }: { id: string }) {
   try {

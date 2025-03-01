@@ -1,4 +1,4 @@
-import { type Model } from "@/components/flow/nodes/prompt";
+import { type Model } from "@/components/app/flow/nodes/prompt";
 import { type QueueNode } from "@/lib/algo/graph";
 import { AideError } from "@/lib/errors";
 

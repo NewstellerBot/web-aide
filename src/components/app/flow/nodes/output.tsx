@@ -4,18 +4,18 @@ import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
 import { v4 } from "uuid";
 
 import { cn } from "@/lib/utils";
-import { useNodeStore } from "@/components/sidebar/store";
+import { useNodeStore } from "@/components/app/sidebar/store";
 import { Input } from "@/components/ui/input";
 
-export type InputNode = Node<
+export type OutputNode = Node<
   {
     id: string;
     name: string;
   },
-  "APIInput"
+  "APIOutput"
 >;
 
-export function defaultInputNode() {
+export function defaultOutputNode() {
   return {
     id: v4(),
     position: { x: 50, y: 50 },
@@ -23,17 +23,17 @@ export function defaultInputNode() {
       name: "",
       isLoading: false,
     },
-    type: "APIInput",
+    type: "APIOutput",
   };
 }
 
-function APIInputNode({
+function APIOutputNode({
   id,
   data,
   selected,
   isConnectable,
-}: NodeProps<InputNode>) {
-  const setInputName = useNodeStore((state) => state.setAPINodeName);
+}: NodeProps<OutputNode>) {
+  const setAPINodeName = useNodeStore((state) => state.setAPINodeName);
 
   return (
     <div
@@ -43,24 +43,24 @@ function APIInputNode({
       )}
     >
       <div>
-        <h1 className="block font-semibold tracking-tight">Input</h1>
+        <h1 className="block font-semibold tracking-tight">Output</h1>
         <label htmlFor="text" className="text-[10px] text-gray-500">
-          Use this node to specify input variable from API.
+          Use this node to specify output variable from API.
         </label>
 
         <Input
           placeholder="some_variable..."
-          onChange={(e) => setInputName(id, e.target.value)}
+          onChange={(e) => setAPINodeName(id, e.target.value)}
           value={data.name}
         />
       </div>
       <Handle
-        type="source"
-        position={Position.Right}
+        type="target"
+        position={Position.Left}
         isConnectable={isConnectable}
       />
     </div>
   );
 }
 
-export default APIInputNode;
+export default APIOutputNode;

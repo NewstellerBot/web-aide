@@ -4,8 +4,8 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from "@/components/ui/sidebar";
-import AppSidebar from "@/components/sidebar/index";
-import FlowLink from "@/components/sidebar/workflow/link";
+import AppSidebar from "@/components/app/sidebar/index";
+import FlowLink from "@/components/app/sidebar/workflow/link";
 
 export default async function Layout({
   children,
