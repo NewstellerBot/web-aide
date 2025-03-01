@@ -1,6 +1,6 @@
 import { updateSchema } from "@/app/api/telegram/schema";
 import { TelegramError } from "../errors";
-import { apiWrapper } from "../wrapper";
+import { apiWrapper } from "../../wrapper";
 import { verifyJWT } from "@/lib/jwt";
 import { z } from "zod";
 import { neon } from "@neondatabase/serverless";
