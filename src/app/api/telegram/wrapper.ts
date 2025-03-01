@@ -10,6 +10,7 @@ export const apiWrapper = <T extends Array<any>>(
     try {
       return await fn(...args);
     } catch (e) {
+      console.error("[API Error]: " + JSON.stringify(e));
       if (e instanceof TelegramError)
         return Response.json(
           { type: e.name, message: e.message },
