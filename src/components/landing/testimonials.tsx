@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import Image from "next/image";
 
 const testimonials = [
   {
@@ -13,7 +12,7 @@ const testimonials = [
     company: "TechCorp",
     image: "/placeholder.svg",
     content:
-      "AIFlow has transformed how we build AI workflows. The no-code interface makes it accessible to our entire team.",
+      "Aide has transformed how we build AI workflows. The no-code interface makes it accessible to our entire team.",
   },
   {
     name: "Michael Chen",
@@ -21,7 +20,7 @@ const testimonials = [
     company: "InnovateLabs",
     image: "/placeholder.svg",
     content:
-      "As a developer, I appreciate the flexibility and power of AIFlow. It's perfect for both simple and complex workflows.",
+      "As a developer, I appreciate the flexibility and power of Aide. It's perfect for both simple and complex workflows.",
   },
   {
     name: "Emily Rodriguez",
@@ -48,6 +47,14 @@ export function Testimonials() {
     );
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      next();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="relative">
       <div className="overflow-hidden">
@@ -59,15 +66,8 @@ export function Testimonials() {
         >
           {testimonials.map((testimonial, index) => (
             <div key={index} className="w-full flex-shrink-0 px-4 md:px-12">
-              <Card className="p-6 md:p-8">
+              <Card className="mx-auto max-w-sm p-6 md:p-8">
                 <div className="flex items-start gap-4">
-                  <Image
-                    src={testimonial.image || "/placeholder.svg"}
-                    alt={testimonial.name}
-                    width={60}
-                    height={60}
-                    className="rounded-full"
-                  />
                   <div className="flex-1">
                     <div className="mb-2 flex items-center gap-2">
                       {Array(5).map((_, i) => (
