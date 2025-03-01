@@ -1,13 +1,13 @@
 import { updateSchema } from "@/app/api/telegram/schema";
-import { TelegramError } from "../errors";
-import { apiWrapper } from "../../wrapper";
+import { TelegramError } from "@/app/api/telegram/errors";
+import { apiWrapper } from "@/app/api/wrapper";
 import { verifyJWT } from "@/lib/jwt";
 import { z } from "zod";
 import { neon } from "@neondatabase/serverless";
 import { env } from "@/env";
 import { BotSchema } from "@/app/actions/db/bot/schema";
 import { get } from "@/app/actions/db/workflow/get";
-import { adjustBotNodes, chunkMessage } from "./util";
+import { adjustBotNodes, chunkMessage } from "@/app/api/telegram/webhook/util";
 import { executeGraph } from "@/app/actions/llm/execute";
 import TelegramBot from "node-telegram-bot-api";
 
