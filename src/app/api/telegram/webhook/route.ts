@@ -63,7 +63,15 @@ export const POST = apiWrapper(async (req: Request) => {
   const context = { botInput: tg.message?.text ?? "" };
   const result = await executeGraph({ nodes, edges, context });
   const tgBot = new TelegramBot(accessToken, { polling: false });
-  await tgBot.sendMessage(chatId, JSON.stringify(result));
+
+  const outputs = Object.keys(result).sort();
+  await Promise.all(
+    outputs.flatMap((outputId) => {
+      const msg = result[outputId];
+      if (!msg) return [];
+      return tgBot.sendMessage(chatId, msg);
+    }),
+  );
 
   return Response.json({ success: true });
 });
