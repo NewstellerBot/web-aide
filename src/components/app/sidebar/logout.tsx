@@ -15,7 +15,10 @@ export default function Logout() {
       <SidebarMenu>
         <SidebarMenuItem className="px-2">
           <SidebarMenuButton asChild>
-            <Button variant={"outline"} onClick={() => signOut()}>
+            <Button
+              variant={"outline"}
+              onClick={() => signOut({ redirectUrl: "/" })}
+            >
               Logout
             </Button>
           </SidebarMenuButton>
