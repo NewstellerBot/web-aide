@@ -99,7 +99,7 @@ export async function setWebhook({
   );
 
   if (!res.ok) {
-    console.error(res.body);
+    console.error("[Telegram error]: " + res.body.read().toString());
     throw new AideError({
       name: "EXECUTION_ERROR",
       message: "Telegram API error",
