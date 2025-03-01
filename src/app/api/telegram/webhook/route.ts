@@ -6,6 +6,10 @@ import { z } from "zod";
 import { neon } from "@neondatabase/serverless";
 import { env } from "@/env";
 import { BotSchema } from "@/app/actions/db/bot/schema";
+import { get } from "@/app/actions/db/workflow/get";
+import { adjustBotNodes } from "./util";
+import { executeGraph } from "@/app/actions/llm/execute";
+import TelegramBot from "node-telegram-bot-api";
 
 const PayloadSchema = z.object({
   botId: z.string(),
@@ -55,6 +59,14 @@ export const POST = apiWrapper(async (req: Request) => {
 
   if (!chatId)
     throw new TelegramError({ name: "BAD_REQUEST", message: "No chatId" });
+
+  const { nodes: originalNodes, edges } = await get({ id: workflowId });
+  const nodes = adjustBotNodes(originalNodes);
+
+  const context = { botInput: tg.message?.text ?? "" };
+  const result = executeGraph({ nodes, edges, context });
+  const tgBot = new TelegramBot(accessToken, { polling: false });
+  await tgBot.sendMessage(chatId, JSON.stringify(result));
 
   console.log(
     "[Telegram api handler]: all is good. executing workflow: ",

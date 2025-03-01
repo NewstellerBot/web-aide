@@ -41,7 +41,7 @@ const NodeSchema = z.object({
   data: z.record(z.any(), z.any()),
   type: z.string(),
 });
-type Node = z.infer<typeof NodeSchema>;
+export type Node = z.infer<typeof NodeSchema>;
 
 const EdgeSchema = z.object({
   id: z.string(),

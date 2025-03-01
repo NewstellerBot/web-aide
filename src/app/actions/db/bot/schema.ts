@@ -5,7 +5,7 @@ export const BotSchema = z.object({
   name: z.string(),
   description: z.string().optional().nullable(),
   user_id: z.string().optional().nullable(),
-  access_token: z.string().optional().nullable(),
+  access_token: z.string(),
   timestamp: z
     .union([z.string().transform((str) => new Date(str)), z.date()])
     .optional()
