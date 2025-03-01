@@ -6,7 +6,6 @@ import { AideError } from "@/lib/errors";
 import fetch from "node-fetch";
 import { z } from "zod";
 import { env } from "@/env";
-import crypto from "crypto";
 import { signJWT } from "@/lib/jwt";
 
 const botSchema = z
@@ -74,7 +73,7 @@ export async function setWebhook({
     WHERE id = ${botId} AND user_id = ${user.id}
   `;
 
-  const webhookUrl = `https://${env.VERCEL_URL}/api/telegram/webhook`;
+  const webhookUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/api/telegram/webhook`;
 
   const payload = {
     botId,
