@@ -31,6 +31,7 @@ export class LLM {
           model: "chatgpt-4o-latest",
           messages: [{ role: "user", content: prompt }],
           stream: false,
+          max_tokens: 512,
         });
 
         return {
