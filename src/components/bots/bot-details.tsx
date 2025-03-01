@@ -31,8 +31,11 @@ const formSchema = z.object({
   description: z.string().optional(),
 });
 
-export default function BotDetails({ bot }: { bot: Bot }) {
-  const router = useRouter();
+export default function BotDetails({
+  bot,
+}: {
+  bot: Omit<Bot, "access_token">;
+}) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({

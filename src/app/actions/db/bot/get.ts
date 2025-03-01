@@ -6,7 +6,7 @@ import { AideError } from "@/lib/errors";
 import { type Bot, BotSchema } from "./schema";
 import { z } from "zod";
 
-export async function get(id: string): Promise<Bot> {
+export async function get(id: string): Promise<Omit<Bot, "access_token">> {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres URL provided!");
   const user = await currentUser();
 
