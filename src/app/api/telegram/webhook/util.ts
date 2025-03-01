@@ -7,9 +7,13 @@ export const adjustBotNodes = (nodes: Node[]): Node[] => {
   return nodes.map((node) => {
     switch (node.type) {
       case "botInput":
-        return { ...node, data: { name: "botInput" } };
+        return { ...node, type: "APIInput", data: { name: "botInput" } };
       case "botOutput":
-        return { ...node, data: { name: `botOutput${counter++}` } };
+        return {
+          ...node,
+          type: "APIOutput",
+          data: { name: `botOutput${counter++}` },
+        };
       default:
         return node;
     }

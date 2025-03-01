@@ -17,10 +17,7 @@ const PayloadSchema = z.object({
 });
 
 export const POST = apiWrapper(async (req: Request) => {
-  console.log("[Telegram api handler]: ", req.body?.toString());
-
   const token = req.headers.get("X-Telegram-Bot-Api-Secret-Token")?.trim();
-  console.log("[Telegram api handler]: token: ", token);
   if (!token)
     throw new TelegramError({
       name: "UNAUTHORIZED",
@@ -64,16 +61,9 @@ export const POST = apiWrapper(async (req: Request) => {
   const nodes = adjustBotNodes(originalNodes);
 
   const context = { botInput: tg.message?.text ?? "" };
-  const result = executeGraph({ nodes, edges, context });
+  const result = await executeGraph({ nodes, edges, context });
   const tgBot = new TelegramBot(accessToken, { polling: false });
   await tgBot.sendMessage(chatId, JSON.stringify(result));
-
-  console.log(
-    "[Telegram api handler]: all is good. executing workflow: ",
-    workflowId,
-    " and bot with access token: ",
-    accessToken,
-  );
 
   return Response.json({ success: true });
 });
