@@ -37,16 +37,18 @@ export const signJWT = (payload: object) => {
 
   const signature = crypto
     .createHmac("sha256", env.TELEGRAM_SECRET)
-    .update(stringifiedHeader + "__" + stringifiedPayload)
+    .update(stringifiedHeader + "-__--__-" + stringifiedPayload)
     .digest("base64url");
 
-  return stringifiedHeader + "__" + stringifiedPayload + "__" + signature;
+  return (
+    stringifiedHeader + "-__--__-" + stringifiedPayload + "-__--__-" + signature
+  );
 };
 
 export const verifyJWT = (
   token: string,
 ): { success: boolean; payload: unknown } => {
-  const [header, payload, signature] = token.split("__");
+  const [header, payload, signature] = token.split("-__--__-");
   if (!header || !payload || !signature) {
     return {
       success: false,
@@ -56,7 +58,7 @@ export const verifyJWT = (
 
   const signatureToVerify = crypto
     .createHmac("sha256", env.TELEGRAM_SECRET)
-    .update(header + "__" + payload)
+    .update(header + "-__--__-" + payload)
     .digest("base64");
   const success = signatureToVerify === signature;
   return {
