@@ -62,8 +62,8 @@ export class LLM {
 export class Embeddings {
   private openai: OpenAI;
   private mock = false;
-  private readonly CHUNK_SIZE = 8000;
-  private readonly CHUNK_OVERLAP = 200; // Number of characters to overlap between chunks
+  private readonly CHUNK_SIZE = 512;
+  private readonly CHUNK_OVERLAP = 128; // Number of characters to overlap between chunks
 
   constructor({ mock }: { mock?: boolean } = {}) {
     if (!env.OPENAI_API_KEY) throw new Error("No openai api key provided");
