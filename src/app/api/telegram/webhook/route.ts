@@ -15,7 +15,7 @@ const PayloadSchema = z.object({
 export const POST = apiWrapper(async (req: Request) => {
   console.log("[Telegram api handler]: ", req.body?.toString());
 
-  const token = req.headers.get("X-Telegram-Bot-Api-Secret-Token");
+  const token = req.headers.get("X-Telegram-Bot-Api-Secret-Token")?.trim();
   console.log("[Telegram api handler]: token: ", token);
   if (!token)
     throw new TelegramError({
