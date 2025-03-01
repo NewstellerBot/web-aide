@@ -69,7 +69,7 @@ export const POST = apiWrapper(async (req: Request) => {
     outputs.flatMap((outputId) => {
       const msg = result[outputId];
       if (!msg) return [];
-      return tgBot.sendMessage(chatId, msg);
+      return tgBot.sendMessage(chatId, msg, { parse_mode: "MarkdownV2" });
     }),
   );
 
