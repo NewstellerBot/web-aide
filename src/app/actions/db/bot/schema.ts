@@ -10,6 +10,7 @@ export const BotSchema = z.object({
     .union([z.string().transform((str) => new Date(str)), z.date()])
     .optional()
     .nullable(),
+  workflow_id: z.string().optional().nullable(),
 });
 
 export type Bot = z.infer<typeof BotSchema>;

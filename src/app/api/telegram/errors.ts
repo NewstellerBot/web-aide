@@ -1,4 +1,4 @@
-type ErrorName = "UNKNOWN" | "BAD_REQUEST";
+type ErrorName = "UNKNOWN" | "BAD_REQUEST" | "UNAUTHORIZED";
 
 export class TelegramError extends Error {
   name: ErrorName;

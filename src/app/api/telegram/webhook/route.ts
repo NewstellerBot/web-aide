@@ -1,30 +1,72 @@
 import { updateSchema } from "@/app/api/telegram/schema";
-// import { TelegramError } from "../errors";
-// import { apiWrapper } from "../wrapper";
+import { TelegramError } from "../errors";
+import { apiWrapper } from "../wrapper";
+import { verifyJWT } from "@/lib/jwt";
+import { z } from "zod";
+import { neon } from "@neondatabase/serverless";
+import { env } from "@/env";
+import { BotSchema } from "@/app/actions/db/bot/schema";
 
-export const POST = async (req: Request) => {
+const PayloadSchema = z.object({
+  botId: z.string(),
+  workflowId: z.string(),
+});
+
+export const POST = apiWrapper(async (req: Request) => {
   console.log("[Telegram api handler]: ", req.body?.toString());
-  const body = (await req.json()) as unknown;
-  try {
-    const tg = updateSchema.parse(body);
-    console.log(tg);
-  } catch (e) {
-    console.error("[Telegram api handler]: " + String(e));
+
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader)
+    throw new TelegramError({
+      name: "UNAUTHORIZED",
+      message: "No auth header",
+    });
+  const [_, token] = authHeader.split(" ");
+  if (!token)
+    throw new TelegramError({
+      name: "UNAUTHORIZED",
+      message: "No token",
+    });
+
+  const { success, payload } = verifyJWT(token);
+  if (!success) {
+    throw new TelegramError({
+      name: "UNAUTHORIZED",
+      message: "Invalid token",
+    });
   }
 
-  // const body = (await req.json()) as unknown;
+  const { botId, workflowId } = PayloadSchema.parse(payload);
+  const sql = neon(env.POSTGRES_URL);
+  const [bot] = await sql`
+    SELECT * FROM bots WHERE id = ${botId}
+  `;
+  const { workflow_id: dbWorkflowId, access_token: accessToken } =
+    BotSchema.parse(bot);
+  if (dbWorkflowId !== workflowId) {
+    throw new TelegramError({
+      name: "BAD_REQUEST",
+      message: "Workflow id mismatch",
+    });
+  }
 
-  // const tg = updateSchema.parse(body);
-  // const chatId = tg.message?.chat?.id;
+  // At this point, we know we have correct workflow
+  // we have the access token for the bot and are ready
+  // to make execute the workflow
 
-  // if (!chatId)
-  //   throw new TelegramError({ name: "BAD_REQUEST", message: "No chatId" });
+  const body = (await req.json()) as unknown;
+  const tg = updateSchema.parse(body);
+  const chatId = tg.message?.chat?.id;
 
-  // const bot = new TelegramBot(TG_TOKEN, { polling: false });
-  // await bot.sendMessage(
-  //   chatId,
-  //   "Hello from the bot!\nGot message: **" + JSON.stringify(tg) + "**",
-  // );
+  if (!chatId)
+    throw new TelegramError({ name: "BAD_REQUEST", message: "No chatId" });
+
+  console.log(
+    "[Telegram api handler]: all is good. executing workflow: ",
+    workflowId,
+    " and bot with access token: ",
+    accessToken,
+  );
 
   return Response.json({ success: true });
-};
+});
