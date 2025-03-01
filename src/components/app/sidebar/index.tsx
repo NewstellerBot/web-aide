@@ -13,6 +13,7 @@ import Workflows, { NavProjectsSkeleton } from "./workflow/list";
 import NewWorkflow from "./workflow/new";
 import Nodes from "./nodes/nodes";
 import Bots from "./bots/list";
+import Logout from "./logout";
 
 const WorkflowsDirectory = () => {
   return (
@@ -38,6 +39,7 @@ export default async function AppSidebar() {
         <WorkflowsDirectory />
         <KnowledgeBases />
         <Bots />
+        <Logout />
       </SidebarContent>
     </Sidebar>
   );
