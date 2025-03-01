@@ -17,6 +17,7 @@ export const env = createEnv({
     AWS_ACCESS_KEY_ID: z.string().min(1),
     AWS_SECRET_ACCESS_KEY: z.string().min(1),
     TELEGRAM_SECRET: z.string().min(1),
+    VERCEL_URL: z.string().min(1),
   },
 
   /**
@@ -26,7 +27,6 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
-    NEXT_PUBLIC_BASE_URL: z.string().min(1),
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
   },
 
@@ -47,8 +47,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     TELEGRAM_SECRET: process.env.TELEGRAM_SECRET,
-    NEXT_PUBLIC_BASE_URL:
-      process.env.NEXT_PUBLIC_BASE_URL ?? "https://localhost:3000",
+    VERCEL_URL: process.env.VERCEL_URL,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
