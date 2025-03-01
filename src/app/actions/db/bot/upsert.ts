@@ -100,5 +100,5 @@ export async function upsert(bot: Omit<Bot, "timestamp" & "id">) {
     setBotProperty(bot.description ?? "", token, "description"),
   ]);
 
-  revalidatePath("/app");
+  revalidatePath("/app", "page");
 }

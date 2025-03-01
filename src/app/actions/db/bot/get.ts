@@ -4,6 +4,7 @@ import { neon } from "@neondatabase/serverless";
 import { currentUser } from "@clerk/nextjs/server";
 import { AideError } from "@/lib/errors";
 import { type Bot, BotSchema } from "./schema";
+import { z } from "zod";
 
 export async function get(id: string): Promise<Bot> {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres URL provided!");
@@ -30,12 +31,24 @@ export async function get(id: string): Promise<Bot> {
     });
   }
 
-  console.log(res);
-
   return BotSchema.parse(res);
 }
 
-export async function getAll(): Promise<Bot[]> {
+const getAllResponseSchema = z
+  .object({
+    id: z.string(),
+    name: z.string(),
+    workflow_id: z.string().nullable(),
+  })
+  .transform(({ id, name, workflow_id }) => ({
+    id,
+    name,
+    workflowId: workflow_id,
+  }));
+
+export type GetAllResponse = z.infer<typeof getAllResponseSchema>;
+
+export async function getAll() {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres URL provided!");
   const user = await currentUser();
 
@@ -47,10 +60,10 @@ export async function getAll(): Promise<Bot[]> {
 
   const sql = neon(process.env.POSTGRES_URL);
   const res = await sql`
-    SELECT * FROM bots 
+    SELECT id, name, workflow_id FROM bots 
     WHERE user_id=${user.id} 
     ORDER BY timestamp DESC
   `;
 
-  return BotSchema.array().parse(res);
+  return getAllResponseSchema.array().parse(res);
 }

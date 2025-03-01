@@ -19,6 +19,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`}>
         <body>
+          {/* <Button className="fixed right-5 top-5 z-50">
+            <SignOutButton />
+          </Button> */}
           {children}
           <Toaster />
         </body>

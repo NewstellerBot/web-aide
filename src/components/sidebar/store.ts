@@ -115,6 +115,14 @@ const useNodeStore = create<AideState>()(
       }),
     setIsWorkflowLoading: (isLoading) => set({ isWorkflowLoading: isLoading }),
     setKnowledgeBases: (k) => set({ knowledgeBases: k }),
+    setBot: (nodeId, bot) =>
+      set({
+        nodes: get().nodes.map((n) => {
+          return n.id === nodeId && n.type === "botInput"
+            ? { ...n, data: { ...bot } }
+            : n;
+        }),
+      }),
     debugLog: () => {
       console.log(get().nodes.map((n) => (n.type === "db" ? n.data : null)));
     },

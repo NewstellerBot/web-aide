@@ -26,6 +26,7 @@ import { updateNodeDiff, updateEdgeDiff } from "./utils";
 import { debounce } from "@/lib/utils";
 import { type Knowledge } from "@/app/actions/db/knowledge/get";
 import BotInput from "./nodes/botInput";
+import { type GetAllResponse as Bot } from "@/app/actions/db/bot/get";
 
 const nodeTypes: NodeTypes = {
   prompt: PromptNode,
@@ -71,7 +72,7 @@ export default function Flow({
   initialEdges: Edge[];
   workflowId: string;
   knowledgeBases: Knowledge[];
-  initialBots: { name: string; id: string }[];
+  initialBots: Bot[];
 }) {
   const {
     viewport,
@@ -100,8 +101,6 @@ export default function Flow({
     const unsubNodes = useNodeStore.subscribe(
       (state) => ({ nodes: state.nodes, workflow: state.workflow }),
       debounce(200, updateNodeDiff),
-      // debounce(200, console.log),
-      { equalityFn: (a, b) => a.nodes === b.nodes, fireImmediately: false },
     );
 
     const unsubEdges = useNodeStore.subscribe(

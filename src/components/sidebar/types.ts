@@ -9,6 +9,7 @@ import type {
 import { type Model } from "@/components/flow/nodes/prompt";
 import { type Workflow } from "@/app/actions/db/workflow/get";
 import { type Knowledge } from "@/app/actions/db/knowledge/get";
+import { type GetAllResponse as Bot } from "@/app/actions/db/bot/get";
 
 export type NodeType = "prompt" | "db" | "APIInput" | "APIOutput" | "botInput";
 
@@ -20,7 +21,7 @@ export type AideState = {
   viewport: Viewport;
   isWorkflowLoading: boolean;
   knowledgeBases: Knowledge[];
-  bots: { id: string; name: string }[];
+  bots: Bot[];
   onNodesChange: OnNodesChange<Node>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
@@ -36,6 +37,7 @@ export type AideState = {
   setAPINodeName: (nodeId: string, name: string) => void;
   setIsWorkflowLoading: (isLoading: boolean) => void;
   setKnowledgeBases: (knowledgeBases: Knowledge[]) => void;
-  setBots: (bots: { id: string; name: string }[]) => void;
+  setBots: (bots: Bot[]) => void;
+  setBot: (nodeId: string, bot: Bot) => void;
   debugLog: () => void;
 };

@@ -52,5 +52,8 @@ CREATE TABLE IF NOT EXISTS bots (
     description TEXT,
     user_id VARCHAR(128),
     access_token VARCHAR(64),
+    webhook_url TEXT,
+    workflow_id VARCHAR(128),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_workflow_bots FOREIGN KEY(workflow_id) REFERENCES workflows(id) ON DELETE SET NULL
 );
