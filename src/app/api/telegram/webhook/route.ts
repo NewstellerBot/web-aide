@@ -57,6 +57,7 @@ export const POST = apiWrapper(async (req: Request) => {
 
   if (!chatId)
     throw new TelegramError({ name: "BAD_REQUEST", message: "No chatId" });
+  console.log("[Telegram]: Chatting with chat id: ", chatId);
 
   const { nodes: originalNodes, edges } = await get({ id: workflowId });
   const nodes = adjustBotNodes(originalNodes);
