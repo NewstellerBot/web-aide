@@ -93,7 +93,7 @@ export async function setWebhook({
       body: JSON.stringify({
         url: webhookUrl,
         allowed_updates: ["message"],
-        // secret_token: ``
+        secret_token: jwt,
       }),
     },
   );
