@@ -59,7 +59,8 @@ export const verifyJWT = (
   const signatureToVerify = crypto
     .createHmac("sha256", env.TELEGRAM_SECRET)
     .update(header + "-__--__-" + payload)
-    .digest("base64");
+    .digest("base64url");
+
   const success = signatureToVerify === signature;
   return {
     success,
