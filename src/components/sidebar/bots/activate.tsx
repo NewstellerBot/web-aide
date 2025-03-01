@@ -11,7 +11,11 @@ import { type Bot } from "@/app/actions/db/bot/schema";
 import { usePathname } from "next/navigation";
 import { upsert } from "@/app/actions/db/bot/upsert";
 
-export default function ActivateBot({ bot }: { bot: Bot }) {
+export default function ActivateBot({
+  bot,
+}: {
+  bot: Omit<Bot, "access_token">;
+}) {
   const [isContentEditable, setIsContentEditable] = useState(false);
   const [name, setName] = useState(bot.name);
   const pathname = usePathname();

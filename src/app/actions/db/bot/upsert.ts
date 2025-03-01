@@ -68,7 +68,7 @@ export async function create(name: string, token: string): Promise<void> {
   }
 }
 
-export async function upsert(bot: Omit<Bot, "timestamp" & "id">) {
+export async function upsert(bot: Omit<Bot, "timestamp" | "access_token">) {
   if (!process.env.POSTGRES_URL) throw new Error("No postgres URL provided!");
   const user = await currentUser();
 
@@ -79,14 +79,9 @@ export async function upsert(bot: Omit<Bot, "timestamp" & "id">) {
     });
 
   const sql = neon(process.env.POSTGRES_URL);
-  let token: string;
-  if (!bot.access_token) {
-    const [res] =
-      await sql`SELECT access_token FROM bots WHERE user_id = ${user.id} AND id = ${bot.id}`;
-    token = (res as { access_token: string }).access_token;
-  } else {
-    token = bot.access_token;
-  }
+  const [res] =
+    await sql`SELECT access_token FROM bots WHERE user_id = ${user.id} AND id = ${bot.id}`;
+  const token = (res as { access_token: string }).access_token;
 
   await sql`
   INSERT INTO bots (id, name, description)
