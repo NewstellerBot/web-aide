@@ -7,18 +7,21 @@ import toast from "react-hot-toast";
 import { upload } from "@/app/actions/s3/upload";
 
 export default function FilesDrop({ knowledgeId }: { knowledgeId: string }) {
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    (async () => {
-      const uploadedFiles = Promise.all(
-        acceptedFiles.map((file) => upload(file, knowledgeId)),
-      );
-      await toast.promise(uploadedFiles, {
-        loading: "Uploading files...",
-        success: "Uploaded files!",
-        error: "Error while uploading files",
-      });
-    })().catch((e) => console.error(e));
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      (async () => {
+        const uploadedFiles = Promise.all(
+          acceptedFiles.map((file) => upload(file, knowledgeId)),
+        );
+        await toast.promise(uploadedFiles, {
+          loading: "Uploading files...",
+          success: "Uploaded files!",
+          error: "Error while uploading files",
+        });
+      })().catch((e) => console.error(e));
+    },
+    [knowledgeId],
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
