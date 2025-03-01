@@ -1,25 +1,30 @@
-import TelegramBot from "node-telegram-bot-api";
-
 import { updateSchema } from "@/app/api/telegram/schema";
-import { TelegramError } from "../errors";
-import { apiWrapper } from "../wrapper";
+// import { TelegramError } from "../errors";
+// import { apiWrapper } from "../wrapper";
 
-const TG_TOKEN = "8011966300:AAEXtz289cMCsuqVT_Zm5DVqRRix6VHCfOI";
-
-export const POST = async (req: Request) =>
-  apiWrapper(async (req: Request) => {
-    const body = (await req.json()) as unknown;
-
+export const POST = async (req: Request) => {
+  console.log("[Telegram api handler]: ", req.body?.toString());
+  const body = (await req.json()) as unknown;
+  try {
     const tg = updateSchema.parse(body);
-    const chatId = tg.message?.chat?.id;
-    if (!chatId)
-      throw new TelegramError({ name: "BAD_REQUEST", message: "No chatId" });
+    console.log(tg);
+  } catch (e) {
+    console.error("[Telegram api handler]: " + String(e));
+  }
 
-    const bot = new TelegramBot(TG_TOKEN, { polling: false });
-    await bot.sendMessage(
-      chatId,
-      "Hello from the bot!\nGot message: **" + JSON.stringify(tg) + "**",
-    );
+  // const body = (await req.json()) as unknown;
 
-    return Response.json({ success: true });
-  })(req);
+  // const tg = updateSchema.parse(body);
+  // const chatId = tg.message?.chat?.id;
+
+  // if (!chatId)
+  //   throw new TelegramError({ name: "BAD_REQUEST", message: "No chatId" });
+
+  // const bot = new TelegramBot(TG_TOKEN, { polling: false });
+  // await bot.sendMessage(
+  //   chatId,
+  //   "Hello from the bot!\nGot message: **" + JSON.stringify(tg) + "**",
+  // );
+
+  return Response.json({ success: true });
+};
