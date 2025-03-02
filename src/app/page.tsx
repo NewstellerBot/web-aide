@@ -117,6 +117,18 @@ export default function Page() {
                   Watch Demo
                 </Button>
               </div>
+              <a
+                href="https://www.producthunt.com/posts/aide-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-aide&#0045;3"
+                target="_blank"
+              >
+                <Image
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=931112&theme=light&t=1740875526443"
+                  alt="aide - telegram&#0032;bots&#0032;in&#0032;&#0060;4min | Product Hunt"
+                  style={{ width: "250px", height: "54px" }}
+                  width="250"
+                  height="54"
+                />
+              </a>
             </div>
             <div className="rounded-lg border bg-background p-8">
               <FlowAnimation />
