@@ -77,7 +77,9 @@ export default function Page() {
             <Button variant="ghost" size="sm" onClick={() => openSignIn()}>
               Sign In
             </Button>
-            <Button size="sm">Get Started</Button>
+            <Button size="sm" onClick={() => openSignUp()}>
+              Get Started
+            </Button>
           </div>
         </div>
       </header>
